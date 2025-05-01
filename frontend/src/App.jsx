@@ -1,51 +1,51 @@
 import { useState, useEffect } from 'react';
-import ContactList from './ContactList';
+import EventList from './EventList';
 import './App.css';
-import ContactForm from './ContactForm';
+import EventForm from './EventForm';
 
 function App() {
-  const [contacts, setContacts] = useState([]);
+  const [events, setEvents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false) // this is for updating the contacts
-  const [currentContact, setCurrentContact] = useState({}) // this is for editing contact (stores current contact to edit)
+  const [currentEvent, setCurrentEvent] = useState({}) // this is for editing contact (stores current contact to edit)
 
   useEffect(() => {
-    fetchContacts()
+    fetchEvents()
   }, []);
 
-  const fetchContacts = async () => {
-    const response = await fetch("http://127.0.0.1:5000/contacts")
+  const fetchEvents = async () => {
+    const response = await fetch("http://127.0.0.1:5000/events")
     const data = await response.json()
-    setContacts(data.contacts)
-    console.log(data.contacts)
+    setEvents(data.events)
+    console.log(data.events)
   };
 
   const closeModal = () => {
     setIsModalOpen(false)
-    setCurrentContact({})
+    setCurrentEvent({})
   }
 
   const openCreateModal = () => {
     if (!isModalOpen) setIsModalOpen(true)
   }
 
-  const openEditModal = (contact) => {
+  const openEditModal = (event) => {
     if (isModalOpen) return
-    setCurrentContact(contact)
+    setCurrentEvent(event)
     setIsModalOpen(true)
   }
 
   const onUpdate = () => {
     closeModal()
-    fetchContacts()
+    fetchEvents()
   }
 
   return <>
-    <ContactList contacts={contacts} updateContact={openEditModal} updateCallback={onUpdate}/>
-    <button onClick={openCreateModal}>Create New Contact</button>
+    <EventList events={events} updateEvent={openEditModal} updateCallback={onUpdate}/>
+    <button onClick={openCreateModal}>Create New Event</button>
     { isModalOpen && <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={closeModal}>&times;</span>
-        <ContactForm existingContact={currentContact} updateCallBack={onUpdate }/>
+        <EventForm existingEvent={currentEvent} updateCallBack={onUpdate }/>
       </div>
     </div>
     }
