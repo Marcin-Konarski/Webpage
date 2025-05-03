@@ -19,7 +19,7 @@ const EventList = ({ events, updateEvent, updateCallback }) => {
     };
 
 
-    return <div>
+    return(<div>
         <h2>Events</h2>
         <table>
             <thead>
@@ -44,8 +44,8 @@ const EventList = ({ events, updateEvent, updateCallback }) => {
                 ))}
             </tbody>
         </table>
-    </div>
-}
+    </div>);
+};
 
 
 export default EventList
