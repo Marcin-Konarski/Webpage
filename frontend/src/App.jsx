@@ -63,13 +63,12 @@ function App() {
           key={event.id} 
           title={event.eventTitle} 
           description={event.eventDescription} 
-          image={image1} 
+          image={event.imagePath}
         />
       ))}
     </div>
     <EventSlider events={events} />
   </>);
-
 };
 
 export default App

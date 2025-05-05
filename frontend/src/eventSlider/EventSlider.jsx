@@ -9,12 +9,6 @@ import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import styles from "./EventSlider.module.css";
 
-import slide_image_1 from '../assets/Disenchantment_sunset_profile.jpg';
-import slide_image_2 from '../assets/Girl_Profile.jpg';
-import slide_image_3 from '../assets/Profile_300x300.jpg';
-import slide_image_4 from '../assets/Fluent_Icon_Profile.png';
-import slide_image_5 from '../assets/dragon-girl-profile.jpg';
-import slide_image_6 from '../assets/m87.jpg';
 
 function EventSlider({ events }) {
     if (!events || events.length === 0) {
@@ -47,7 +41,7 @@ function EventSlider({ events }) {
             >
                 {events.map((event, index) => 
                     <SwiperSlide key={index} className={styles.swiper_slide}>
-                    <img src={slide_image_1} alt="slide_image" />
+                    <img src={event.imagePath} alt="slide_image" />
                     <div className={styles.text_overlay}>
                         <h3>{event.eventTitle}</h3>
                         <p>{event.eventDescription}</p>

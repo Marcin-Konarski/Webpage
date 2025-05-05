@@ -1,13 +1,20 @@
-from config import db
+from config import db, app
 from datetime import datetime, timezone
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import SubmitField
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 
+
+images = UploadSet('images', IMAGES)
+configure_uploads(app, images)
 
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     event_title = db.Column(db.String(50), unique=True, nullable=False)
     event_description = db.Column(db.String(1000), nullable=False)
-    event_date = db.Column(db.DateTime(timezone=True), default = lambda: datetime.now(datetime.timezone.utc), nullable=False)
+    event_date = db.Column(db.DateTime(timezone=True), nullable=False)
     event_location = db.Column(db.String(150), nullable=False)
     event_category = db.Column(db.String(50), nullable=False)
     is_finished = db.Column(db.Boolean, default=False, nullable=False)
@@ -21,7 +28,7 @@ class Event(db.Model):
             "id": self.id,
             "eventTitle": self.event_title,
             "eventDescription": self.event_description,
-            "eventDate": self.event_date.astimezone(timezone.utc).isoformat(),
+            "eventDate": self.event_date.isoformat(),
             "eventLocation": self.event_location,
             "eventCategory": self.event_category,
             "isFinished": self.is_finished,
@@ -53,6 +60,20 @@ event_participants = db.Table(
     db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
 )
+
+
+class NoCsrfForm(FlaskForm):
+    class Meta:
+        csrf = False  # CSRF disabled for this form (at least for now)
+
+class UploadForm(NoCsrfForm):
+    image = FileField(
+        validators=[
+            FileAllowed(["jpg", "png"], "Only images are allowed"),
+            FileRequired("File field should not be empty"),
+        ]
+    )
+    submit = SubmitField("Upload")
 
 
 # ## Exmple:

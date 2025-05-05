@@ -1,58 +1,74 @@
-import {isValidElement, useState} from "react"
+import { useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import DropdownItem from "../Dropdown/DropdownItem";
 
+const EventForm = ({ existingEvent = {}, updateCallBack }) => {
+    const [eventTitle, setEventTitle] = useState(existingEvent.eventTitle || "");
+    const [eventDescription, setEventDescription] = useState(existingEvent.eventDescription || "");
+    const [eventDate, setEventDate] = useState(existingEvent.eventDate || "");
+    const [eventLocation, setEventLocation] = useState(existingEvent.eventLocation || "");
+    const [eventCategory, setEventCategory] = useState(existingEvent.eventCategory || "");
+    const [isFinished, setIsFinished] = useState(existingEvent.isFinished || false);
+    const [createdBy, setCreatedBy] = useState(existingEvent.createdBy || 0);
 
-const EventForm = ({existingEvent = {}, updateCallBack}) => {
-    const [eventTitle, setEventTitle] = useState(existingEvent.eventTitle || "")
-    const [eventDescription, setEventDescription] = useState(existingEvent.eventDescription || "")
-    const [eventDate, setEventDate] = useState(existingEvent.eventDate || "")
-    const [eventLocation, setEventLocation] = useState(existingEvent.eventLocation || "")
-    const [eventCategory, setEventCategory] = useState(existingEvent.evenCategory || "")
-    const [isFinished, setIsFinished] = useState(existingEvent.isFinished || false)
-    const [imagePath, setImagePath] = useState(existingEvent.imagePath || "")
-    const [createdBy, setCreatedBy] = useState(existingEvent.createdBy || 0)
+    // Images:
+    const [image, setImage] = useState();
+    const [message, setMessage] = useState("");
+    const [imagePath, setImagePath] = useState("");
 
-    const categories = ["Music", "Art", "Sports", "Recreation", "Food", "Drink", "Business", "Education", "Family", "Kids", "Community", "Parties",
-        "Outdoor", "Nature", "Adventure", "Politics", "Government", "Health", "Spirituality", "Shopping", "Fashion", "Travel", "Media", "Cinema",
-        "Entertainment", "Career", "Science", "Technology", "Home", "Gardening", "Faith", "Religion", "Charity", "Social", "Festivals", "Other"]
+    const categories = [
+        "Music", "Art", "Sports", "Recreation", "Food", "Drink", "Business", "Education",
+        "Family", "Kids", "Community", "Parties", "Outdoor", "Nature", "Adventure", "Politics",
+        "Government", "Health", "Spirituality", "Shopping", "Fashion", "Travel", "Media", "Cinema",
+        "Entertainment", "Career", "Science", "Technology", "Home", "Gardening", "Faith", "Religion",
+        "Charity", "Social", "Festivals", "Other"
+    ];
 
-    const updating = Object.entries(existingEvent).length !== 0
+    const updating = Object.entries(existingEvent).length !== 0;
 
     const onSubmit = async (e) => {
-        e.preventDefault()
-
-        const data = {
-            eventTitle,
-            eventDescription,
-            eventDate,
-            eventLocation,
-            eventCategory,
-            isFinished,
-            imagePath,
-            createdBy
+        e.preventDefault();
+    
+        const formData = new FormData();
+        formData.append("eventTitle", eventTitle);
+        formData.append("eventDescription", eventDescription);
+        formData.append("eventDate", eventDate);
+        formData.append("eventLocation", eventLocation);
+        formData.append("eventCategory", eventCategory);
+        formData.append("isFinished", isFinished);
+        formData.append("createdBy", createdBy);
+        if (image) {
+            formData.append("image", image);
         }
-        const url = "http://127.0.0.1:5000/" + (updating ? `update_event/${existingEvent.id}`: "create_event")
+    
+        const url = "http://127.0.0.1:5000/" + (updating ? `update_event/${existingEvent.id}` : "create_event");
         const options = {
             method: updating ? "PATCH" : "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
+            body: formData,
+        };
+    
+        try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+    
+            if (response.ok) {
+                updateCallBack();
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error("Error submitting event:", error);
         }
-        const response = await fetch(url, options)
-        if (response.status !== 201 && response.status !== 200) {
-            const data = await response.json()
-            alert(data.message)
-        } else {
-            updateCallBack();
-        }
-    }
+    };
+
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
 
     return (
         <form onSubmit={onSubmit}>
             <div>
-            <label htmlFor="eventTitle">Event Title:</label>
+                <label htmlFor="eventTitle">Event Title:</label>
                 <input
                     type="text"
                     id="eventTitle"
@@ -96,13 +112,15 @@ const EventForm = ({existingEvent = {}, updateCallBack}) => {
                 <Dropdown
                     id="eventCategory"
                     buttonText={eventCategory || "Select a Category"}
-                    content={<>
-                        {categories.map((item) => (
-                            <DropdownItem key={item} onClick={() => setEventCategory(item)}>
-                                {item}
-                            </DropdownItem>
-                        ))}
-                    </>}
+                    content={
+                        <>
+                            {categories.map((item) => (
+                                <DropdownItem key={item} onClick={() => setEventCategory(item)}>
+                                    {item}
+                                </DropdownItem>
+                            ))}
+                        </>
+                    }
                 />
             </div>
             <div>
@@ -114,10 +132,24 @@ const EventForm = ({existingEvent = {}, updateCallBack}) => {
                     onChange={(e) => setCreatedBy(e.target.value)}
                 />
             </div>
-
+            <div>
+                <label htmlFor="image">Event Image:</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                />
+                {message && <p>{message}</p>}
+                {imagePath && (
+                    <div>
+                        <p>Uploaded Image:</p>
+                        <img src={imagePath} alt="Uploaded" style={{ width: "200px" }} />
+                    </div>
+                )}
+            </div>
             <button type="submit">{updating ? "Update" : "Create"}</button>
         </form>
     );
 };
 
-export default EventForm
+export default EventForm;

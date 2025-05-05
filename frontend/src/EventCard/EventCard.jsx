@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styles from "./EventCard.module.css"
 
 function EventCard({ title, description, image }) {
