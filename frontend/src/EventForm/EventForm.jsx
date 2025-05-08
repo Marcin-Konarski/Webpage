@@ -2,6 +2,15 @@ import { useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import DropdownItem from "../Dropdown/DropdownItem";
 
+
+const categories = [
+    "Music", "Art", "Sports", "Recreation", "Food", "Drink", "Business", "Education",
+    "Family", "Kids", "Community", "Parties", "Outdoor", "Nature", "Adventure", "Politics",
+    "Government", "Health", "Spirituality", "Shopping", "Fashion", "Travel", "Media", "Cinema",
+    "Entertainment", "Career", "Science", "Technology", "Home", "Gardening", "Faith", "Religion",
+    "Charity", "Social", "Festivals", "Other"
+];
+
 const EventForm = ({ existingEvent = {}, updateCallBack }) => {
     const [eventTitle, setEventTitle] = useState(existingEvent.eventTitle || "");
     const [eventDescription, setEventDescription] = useState(existingEvent.eventDescription || "");
@@ -15,14 +24,6 @@ const EventForm = ({ existingEvent = {}, updateCallBack }) => {
     const [image, setImage] = useState();
     const [message, setMessage] = useState("");
     const [imagePath, setImagePath] = useState("");
-
-    const categories = [
-        "Music", "Art", "Sports", "Recreation", "Food", "Drink", "Business", "Education",
-        "Family", "Kids", "Community", "Parties", "Outdoor", "Nature", "Adventure", "Politics",
-        "Government", "Health", "Spirituality", "Shopping", "Fashion", "Travel", "Media", "Cinema",
-        "Entertainment", "Career", "Science", "Technology", "Home", "Gardening", "Faith", "Religion",
-        "Charity", "Social", "Festivals", "Other"
-    ];
 
     const updating = Object.entries(existingEvent).length !== 0;
 
@@ -40,7 +41,7 @@ const EventForm = ({ existingEvent = {}, updateCallBack }) => {
         if (image) {
             formData.append("image", image);
         }
-    
+
         const url = "http://127.0.0.1:5000/" + (updating ? `update_event/${existingEvent.id}` : "create_event");
         const options = {
             method: updating ? "PATCH" : "POST",
@@ -64,6 +65,7 @@ const EventForm = ({ existingEvent = {}, updateCallBack }) => {
     const handleImageChange = (e) => {
         setImage(e.target.files[0]);
     };
+
 
     return (
         <form onSubmit={onSubmit}>

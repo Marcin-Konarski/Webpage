@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import './App.css';
-import image1 from "./assets/Disenchantment_sunset_profile.jpg";
 
 import EventList from './EventList/EventList';
-import EventForm from './EventForm/EventForm';
 import EventCard from './EventCard/EventCard';
-
+import EventSlider from './eventSlider/EventSlider';
+import EventForm from './EventForm';
+5
+import './App.css';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
-import EventSlider from './eventSlider/EventSlider';
 
 function App() {
   const [events, setEvents] = useState([]);

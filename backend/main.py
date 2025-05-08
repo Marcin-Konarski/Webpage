@@ -1,5 +1,4 @@
 from flask import request, jsonify, url_for, send_from_directory
-from flask_wtf.csrf import generate_csrf
 from models import Event, User, UploadForm, event_participants, images
 from config import app, db
 from dateutil import parser
@@ -177,7 +176,6 @@ def delete_event(event_id):
     db.session.commit()
 
     return jsonify({"message": "Event deleted"}), 200
-
 
 
 @app.route("/images/", methods=["POST"])
