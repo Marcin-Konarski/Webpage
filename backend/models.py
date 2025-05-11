@@ -1,10 +1,8 @@
 from config import db, app
-from datetime import datetime, timezone
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
 from flask_uploads import UploadSet, IMAGES, configure_uploads
-
 
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
@@ -40,11 +38,11 @@ class Event(db.Model):
 
 class User(db.Model):
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True) # unique=True
     user_name = db.Column(db.String(20), nullable = False)
     user_surname = db.Column(db.String(40), nullable = False)
-    user_email = db.Column(db.String(100), unique = True, nullable = False)
-    password_hash = db.Column(db.String(64), nullable = False)
+    user_email = db.Column(db.String(345), unique = True, nullable = False)
+    password_hash = db.Column(db.String(72), nullable = False)
     events = db.relationship('Event', secondary='event_participants', back_populates='participants')
 
     def to_json(self):
@@ -53,6 +51,7 @@ class User(db.Model):
             "userName": self.user_name,
             "userSurname": self.user_surname,
             "userEmail": self.user_email,
+            "userPassword": self.password_hash
         }
 
 event_participants = db.Table(
