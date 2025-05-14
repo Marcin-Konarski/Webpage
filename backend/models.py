@@ -11,7 +11,7 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     event_title = db.Column(db.String(50), unique=True, nullable=False)
-    event_description = db.Column(db.String(1000), nullable=False)
+    event_description = db.Column(db.String(400), nullable=False)
     event_date = db.Column(db.DateTime(timezone=True), nullable=False)
     event_location = db.Column(db.String(150), nullable=False)
     event_category = db.Column(db.String(50), nullable=False)

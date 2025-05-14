@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import './index.css'
-import HomeScreen from "./HomeScreen";
-import AddEventScreen from "./AddEventScreen";
-import LoginScreen from "./LoginScreen";
-import RegisterScreen from "./RegisterScreen";
-import PageNotFound from "./PageNotFound";
-import EventDeailsScreen from "./EventDetailsScreen";
-import { EventProvider } from "./EventProvider";
+import HomeScreen from "./Screens/HomeScreen";
+import CreateEventScreen from "./Screens/CreateEventScreen";
+import LoginScreen from "./Screens/LoginScreen";
+import RegisterScreen from "./Screens/RegisterScreen";
+import PageNotFound from "./Screens/PageNotFound";
+import EventDeailsScreen from "./Screens/EventDetailsScreen";
+import { EventProvider } from "./Context";
 
 
   const router = createBrowserRouter([
@@ -26,7 +26,7 @@ import { EventProvider } from "./EventProvider";
     },
     {
       path: '/create_event',
-      element: <AddEventScreen />,
+      element: <CreateEventScreen />,
     },
     {
       path: '/login',
@@ -42,8 +42,8 @@ import { EventProvider } from "./EventProvider";
 
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      {/* <EventProvider> */}
+      <EventProvider>
         <RouterProvider router={router} />
-      {/* </EventProvider> */}
+      </EventProvider>
     </React.StrictMode>
   )
