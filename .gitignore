@@ -67,3 +67,5 @@ Thumbs.db
 
 
 backend/images/*
+venuo_mail_credentials.txt
+backend/flask_session/

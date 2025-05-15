@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
 import { English } from "flatpickr/dist/l10n/default.js";
+import "flatpickr/dist/flatpickr.min.css";
 
 const categories = [
     "Music", "Art", "Sports", "Recreation", "Food", "Drink", "Business", "Education",
@@ -203,7 +203,7 @@ const EventForm = ({ isUpdating = false }) => {
                 minuteIncrement: 15,
                 locale: {
                     ...English,
-                    firstDayOfWeek: 1, // Monday as first day
+                    firstDayOfWeek: 1, // Monday as first day, dunno why this is not the default
                 },
                 onChange: (selectedDates) => {
                     setEventDate(selectedDates[0]?.toISOString());
@@ -218,7 +218,7 @@ const EventForm = ({ isUpdating = false }) => {
         const newErrors = {};
 
         if (!eventTitle.trim()) newErrors.eventTitle = "Title is required";
-        if (!eventDescription.trim()) newErrors.eventDescription = "Description is required"; // ✅ ADD THIS
+        if (!eventDescription.trim()) newErrors.eventDescription = "Description is required";
         if (!eventLocation.trim()) newErrors.eventLocation = "Location is required";
         if (!eventCategory) newErrors.eventCategory = "Category is required";
         if (!eventDate) newErrors.eventDate = "Date is required";

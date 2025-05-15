@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import './index.css'
 import HomeScreen from "./Screens/HomeScreen";
-import CreateEventScreen from "./Screens/CreateEventScreen";
+import CreateEditEventScreen from "./Screens/CreateEditEventScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
 import PageNotFound from "./Screens/PageNotFound";
@@ -26,7 +26,11 @@ import { EventProvider } from "./Context";
     },
     {
       path: '/create_event',
-      element: <CreateEventScreen />,
+      element: <CreateEditEventScreen />,
+    },
+    {
+      path: '/edit_event/:eventId',
+      element: <CreateEditEventScreen />,
     },
     {
       path: '/login',

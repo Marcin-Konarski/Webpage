@@ -1,8 +1,11 @@
-from flask import request, jsonify, url_for, send_from_directory, session
-from models import Event, User, UploadForm, event_participants, images
-from config import app, db, bcrypt, server_session
+from flask import request, jsonify, url_for, send_from_directory
+from models import Event, User, UploadForm, images
+from config import app, db
+from auth import auth
 from dateutil import parser
 from datetime import timezone
+
+app.register_blueprint(auth)
 
 
 # get
@@ -87,9 +90,6 @@ def create_event():
 # Update
 @app.route("/update_event/<int:event_id>", methods=["PATCH"])
 def update_event(event_id):
-    print("Request Content-Type:", request.content_type)  # Log the content type
-    print("Request Form Data:", request.form)  # Log the form data
-    print("Request Files:", request.files)  # Log the uploaded files
     event = Event.query.get(event_id)
 
     if not event:
@@ -178,95 +178,8 @@ def delete_event(event_id):
     return jsonify({"message": "Event deleted"}), 200
 
 
-@app.route("/images/", methods=["POST"])
-def upload_images():
-    form = UploadForm()
-
-    if form.validate_on_submit():
-        try:
-            filename = images.save(form.image.data)
-            imagePath = url_for('get_file', filename=filename, _external=True)
-            return jsonify({"message": "Image uploaded successfully", "imagePath": imagePath}), 201
-        except Exception as e:
-            return jsonify({"message": f"Error uploading image: {str(e)}"}), 500
-    else:
-        print("Form validation failed:", form.errors)
-        return jsonify({"message": "Invalid form submission", "errors": form.errors}), 400
-
-@app.route("/@me", methods=["GET"])
-def get_current_user():
-    user_id = session.get("user_id")
-
-    if not user_id:
-        return jsonify({"message": "Unauthorized"}), 401
-    
-    user = User.query.filter_by(id=user_id).first()
-
-    return jsonify({
-        "id": user.id,
-        "userName": user.user_name,
-        "userSurname": user.user_surname,
-        "userEmail": user.user_email,
-    })
-
-
-@app.route("/register", methods=["POST"])
-def register_user():
-    name = request.json["userName"]
-    surname = request.json["userSurname"]
-    email = request.json["userEmail"]
-    password = request.json["userPassword"]
-
-    user_exists = User.query.filter_by(user_email=email).first() is not None # This will reutrn True is the user with that email exisis
-    if user_exists:
-        return jsonify({"message": "User already exists"}), 409    
-
-    raw_hashed_password = bcrypt.generate_password_hash(password)
-    str_hashed_password = raw_hashed_password.decode("utf-8")
-    new_user = User(
-        user_name    = name,
-        user_surname = surname,
-        user_email   = email,
-        password_hash= str_hashed_password
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({
-        "id": new_user.id,
-        "userName": new_user.user_name,
-        "userSurname": new_user.user_surname,
-        "userEmail": new_user.user_email,
-    })
-
-
-@app.route("/login", methods=["POST"])
-def login_user():
-    email = request.json["userEmail"]
-    password = request.json["userPassword"]
-
-    user_exists = User.query.filter_by(user_email=email).first() is not None
-    if not user_exists:
-        return jsonify({"message": "Unauthorized"}), 401
-
-    user = User.query.filter_by(user_email=email).first()
-    if not bcrypt.check_password_hash(user.password_hash, password):
-        return jsonify({"message": "Unauthorized"}), 401
-
-    session["user_id"] = user.id # this assigns a session cookie with redis?
-
-    return jsonify({
-        "id": user.id,
-        "userName": user.user_name,
-        "userSurname": user.user_surname,
-        "userEmail": user.user_email,
-        "userPassword": user.password_hash
-    })
-
-
 if __name__ == "__main__":
-    with app.app_context(): # If we don't have the database then create it
+    with app.app_context(): # If there is no database then create it
         db.create_all()
 
     app.run(debug=True)

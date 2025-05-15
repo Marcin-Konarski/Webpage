@@ -42,7 +42,8 @@ class User(db.Model):
     user_name = db.Column(db.String(20), nullable = False)
     user_surname = db.Column(db.String(40), nullable = False)
     user_email = db.Column(db.String(345), unique = True, nullable = False)
-    password_hash = db.Column(db.String(72), nullable = False)
+    user_password = db.Column(db.String(72), nullable = False)
+    is_confirmed = db.Column(db.Boolean, nullable=False)
     events = db.relationship('Event', secondary='event_participants', back_populates='participants')
 
     def to_json(self):
@@ -51,8 +52,23 @@ class User(db.Model):
             "userName": self.user_name,
             "userSurname": self.user_surname,
             "userEmail": self.user_email,
-            "userPassword": self.password_hash
+            "userPassword": self.user_password,
+            "isConfirmed": self.is_confirmed,
         }
+
+    def get_id(self):
+        return str(self.id)
+
+    @property
+    def is_authenticated(self):
+        return True
+    
+    @property
+    def is_active(self):
+        return self.is_confirmed
+
+    def __repr__(self):
+        return f"<email {self.email}>" # Don't know what it does - ones I'll read up on it I'll update this comment
 
 event_participants = db.Table(
     'event_participants',

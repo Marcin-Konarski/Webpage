@@ -6,12 +6,9 @@ const EventDeailsScreen = ({ event, onClose }) => {
   return (
     <div className="relative">
         {/* Close button */}
-        <button 
-            className="absolute top-2 right-2 text-xl text-gray-500 hover:text-gray-800"
+        <button className="absolute top-2 right-2 text-xl text-gray-500 hover:text-gray-800"
             onClick={onClose}
-        >
-            ×
-        </button>
+        >×</button>
         
         <h2 className="text-2xl font-bold mb-4">{event.eventTitle}</h2>
         

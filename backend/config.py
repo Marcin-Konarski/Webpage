@@ -3,11 +3,30 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+from flask_login import LoginManager
 from dotenv import load_dotenv
 import redis
 import os
 
-load_dotenv()
+try:
+    load_dotenv()
+except:
+    print("""
+.env file is required in order for app to run
+The structure of the .env file is as follows:
+```
+SECRET_KEY=<secret key here this is just a placeholder>
+SECURITY_PASSWORD_SALT=<security password salt here this is just a placeholder>
+EMAIL_USER=venuo.mail@gmail.com
+EMAIL_PASSWORD=<16 characters google app password here this is just a placeholder>
+```
+
+I also needed to run following commands in powershell to make it work:
+```
+$env:EMAIL_USER = "venuo.mail@gmail.com"
+$env:EMAIL_PASSWORD = "<16 characters google app password inside quotes>"
+```
+""")
 
 app = Flask(__name__) # Creats the app
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:5173"}})
@@ -16,15 +35,40 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db" # Specifies th
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # app.config['SECRET_KEY'] = "U9CA2Dng5aqRYE9pqzh96esYDDtFAm26+Y3BdEllM"
 app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
+app.config["SECURITY_PASSWORD_SALT"] = os.environ["SECURITY_PASSWORD_SALT"]
 app.config["UPLOADED_IMAGES_DEST"] = "./images/"
 app.config["WTF_CSRF_ENABLED"] = False # CSRF authentication tokens disabled (at least for now)
 app.config["SQLALCHEMY_ECHO"] = True
-app.config["SESSION_TYPE"] = "redis"
+app.config["SESSION_TYPE"] = "filesystem" # "redis"
 app.config["SESSION_PERMAMENT"] = False
 app.config["SESSION_USE_SIGNER"] = True
-app.config["SESSION_REDIS"] = redis.from_url("redis://127.0.0.1:6379") # "redis://127.0.0.1:6379" # "redis://172.17.29.126:6379"
+app.config["SESSION_FILE_DIR"] = "flask_session"
+# app.config["SESSION_REDIS"] = redis.from_url("redis://127.0.0.1:6379") # "redis://172.17.29.126:6379"
+
+# For sending emails and email verification
+app.config["MAIL_DEFAULT_SENDER"] = "noreply@flask.com"
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 465
+app.config["MAIL_USE_TLS"] = False
+app.config["MAIL_USE_SSL"] = True
+app.config["MAIL_DEBUG"] = False
+app.config["MAIL_USERNAME"] = os.environ["EMAIL_USER"]
+app.config["MAIL_PASSWORD"] = os.environ["EMAIL_PASSWORD"]
+
+# Initialize Flask Login
+login_manager = LoginManager(app)
+login_manager.login_view = 'login' # Route the redirect when login is required
+login_manager.login_message_category = 'info'
+
 
 bcrypt = Bcrypt(app)
 server_session = Session(app)
-
 db = SQLAlchemy(app) # Creates database instance
+
+
+# .env file is required in order for app to run
+# The structure of the .env file is as follows:
+# SECRET_KEY=<secret key here this is just a placeholder>
+# SECURITY_PASSWORD_SALT=<security password salt here this is just a placeholder>
+# EMAIL_USER=venuo.mail@gmail.com
+# EMAIL_PASSWORD=<16 characters google app password here this is just a placeholder>

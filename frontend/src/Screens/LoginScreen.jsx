@@ -1,9 +1,10 @@
 import React from 'react'
+import RegisterForm from '../Components/RegisterForm'
 
 const LoginScreen = () => {
-  return (
-    <div>Log in</div>
-  )
+  return (<>
+    <RegisterForm />
+  </>)
 }
 
 export default LoginScreen

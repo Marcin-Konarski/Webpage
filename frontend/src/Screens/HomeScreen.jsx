@@ -3,6 +3,7 @@ import EventCard from '../Components/EventCard'
 import { Outlet, NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { useEventContext } from '../Context';
 import EventDeailsScreen from './EventDetailsScreen';
+import NavBar from '../Components/NavBar';
 
 const HomeScreen = () => {
   const [showDialog, setShowDialog] = useState(false);
@@ -46,7 +47,17 @@ const HomeScreen = () => {
   }
 
   return (<>
-    <h1 className="text-3xl font-bold mb-6 text-center">HomeScreen</h1>
+
+    <NavLink 
+        className={({ isActive }) => 
+          `rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all
+          shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700
+          active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none
+          ${isActive ? 'text-primary-700 ' : ''}`}
+        to={`login`}>
+            Log In
+    </NavLink>
+
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {(events || []).map((event) => (
         <EventCard 
