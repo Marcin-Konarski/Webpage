@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
-import EventForm from '../Components/EventForm';
+import EventForm from '@/Components/EventForm';
 
 const AddEventScreen = () => {
   const [isUpdating, SetIsUpdating] = useState(false);

@@ -55,11 +55,11 @@ def confirm_email(token):
     email = confirm_token(token)
     if not email:
         flash("The confirmation link is invalid or has expired.", "danger")
-        return redirect("/")
+        return redirect("http://localhost:5173/register")
     user = User.query.filter_by(user_email=email).first()
     if user.is_confirmed:
         flash("Account already confirmed.", "success")
-        return redirect("/")
+        return redirect("http://localhost:5173/")
     if user.user_email == email:
         user.is_confirmed = True
         db.session.add(user)
@@ -69,7 +69,7 @@ def confirm_email(token):
         flash("The confirmation link is invalid or has expired.", "danger")
 
     login_user(user)
-    return redirect("/")
+    return redirect("http://localhost:5173/")
 
 @auth.route("/register", methods=["POST"])
 def register():

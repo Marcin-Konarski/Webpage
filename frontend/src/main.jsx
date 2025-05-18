@@ -2,14 +2,14 @@ import React from "react";
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import './index.css'
-import HomeScreen from "./Screens/HomeScreen";
-import CreateEditEventScreen from "./Screens/CreateEditEventScreen";
-import LoginScreen from "./Screens/LoginScreen";
-import RegisterScreen from "./Screens/RegisterScreen";
-import PageNotFound from "./Screens/PageNotFound";
-import EventDeailsScreen from "./Screens/EventDetailsScreen";
-import { EventProvider } from "./Context";
+import '@/index.css'
+import HomeScreen from "@/Screens/HomeScreen";
+import CreateEditEventScreen from "@/Screens/CreateEditEventScreen";
+import LoginScreen from "@/Screens/LoginScreen";
+import RegisterScreen from "@/Screens/RegisterScreen";
+import PageNotFound from "@/Screens/PageNotFound";
+import EventDeailsScreen from "@/Screens/EventDetailsScreen";
+import { EventProvider } from "@/Context";
 
 
   const router = createBrowserRouter([

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
     const [name, setName] = useState("");
@@ -6,26 +7,31 @@ const RegisterForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-
+    const navigate = useNavigate();
 
     const validate = async(e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("userEmail", email)
-
-        const url = "http://127.0.0.1:5000/validate";
+        const url = "http://127.0.0.1:5000/register";
+        const body = {
+            userName: name,
+            userSurname: surname,
+            userEmail: email,
+            userPassword: password,
+        };
         const options = {
             method: "POST",
-            body: formData
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
         };
         try {
             const response = await fetch(url, options);
             const data = await response.json();
 
             if (response.ok) {
-                alert("GOOD!" + JSON.stringify(data))
-                // onSubmit();
+                onSubmit();
             } else {
                 alert(data.message || "An error occurred");
             }
@@ -36,7 +42,7 @@ const RegisterForm = () => {
     }
 
     const onSubmit = () => {
-
+        navigate('/')
     }
 
     return (<>
@@ -100,7 +106,7 @@ const RegisterForm = () => {
                 <button type="submit" className={`py-2 px-6 border border-transparent rounded-md shadow-sm text-sm
                     font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition-all`}
                     onClick={validate}>
-                    Log in
+                    Sign up
                 </button>
 
             </div>
