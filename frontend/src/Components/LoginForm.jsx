@@ -2,12 +2,9 @@ import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils'
 
-const RegisterForm = () => {
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("");
+const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState({});
     const navigate = useNavigate();
 
@@ -19,10 +16,8 @@ const RegisterForm = () => {
 
         if (Object.keys(validationErrors).length > 0) return;
 
-        const url = "http://127.0.0.1:5000/register";
+        const url = "http://127.0.0.1:5000/login";
         const body = {
-            userName: name,
-            userSurname: surname,
             userEmail: email,
             userPassword: password,
         };
@@ -51,15 +46,8 @@ const RegisterForm = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!name.trim()) newErrors.name = "First name cannot be empty";
-        if (!surname.trim()) newErrors.surname = "Last name cannot be empty";
         if (!email.trim()) newErrors.email = "Email cannot be empty";
         if (!password.trim()) newErrors.password = "Password cannot be empty";
-        if (!confirmPassword.trim()) newErrors.confirmPassword = "Password cannot be empty";
-
-        if (password != confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match";
-        }
 
         return newErrors;
     }
@@ -72,36 +60,9 @@ const RegisterForm = () => {
     return (<>
 
         <section className="form">
-            <h1 className="text-3xl font-extrabold text-gray-200 mb-6 text-left capitalize">Sign Up</h1>
+            <h1 className="text-3xl font-extrabold text-gray-200 mb-6 text-left capitalize">Log in</h1>
 
             <form className="space-y-3">
-                {/* Name and Surname */}
-                <div>
-                    <div className="flex items-start">
-                        <label htmlFor="name" className="font-bold text-lg text-gray-200 ml-3 min-w-20">First Name</label>
-                    </div>
-                    <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} 
-                        maxLength={50} placeholder="Enter your first name" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700")} />
-                    {error.name && (
-                        <p className="text-red-500 text-sm mt-1">{error.name}</p>
-                    )}
-                </div>
-
-                <div>
-                    <div className="flex items-start">
-                        <label htmlFor="surname" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Last Name</label>
-                    </div>
-                    <input id="surname" type="text" value={surname} onChange={(e) => setSurname(e.target.value)} 
-                        maxLength={50} placeholder="Enter your last name" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
-                    {error.surname && (
-                        <p className="text-red-500 text-sm mt-1">{error.surname}</p>
-                    )}
-                </div>
-
                 <div>
                     <div className="flex items-start">
                         <label htmlFor="email" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Email</label>
@@ -125,19 +86,6 @@ const RegisterForm = () => {
                             "focus:outline-purple-700 focus-ring")} />
                     {error.password && (
                         <p className="text-red-500 text-sm mt-1">{error.password}</p>
-                    )}
-                </div>
-
-                <div>
-                    <div className="flex items-start">
-                        <label htmlFor="confirmPassword" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Confirm Password</label>
-                    </div>
-                    <input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} 
-                        maxLength={50} placeholder="Confirm your password" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
-                    {error.confirmPassword && (
-                        <p className="text-red-500 text-sm mt-1">{error.confirmPassword}</p>
                     )}
                 </div>
             </form>
@@ -164,4 +112,4 @@ const RegisterForm = () => {
     </> )
 }
 
-export default RegisterForm
+export default LoginForm

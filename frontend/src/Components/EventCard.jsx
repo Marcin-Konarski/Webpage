@@ -22,7 +22,7 @@ const EventCard = ({ event, buttonText}) => { //id, title, description, image,
     function initTilt() {
       if (tiltRef.current) {
         VanillaTilt.init(tiltRef.current, {
-          max: 3,
+          max: 4,
           transition: true,
           easing: "cubic-bezier(.03,.98,.52,.99)",
         });
@@ -50,10 +50,10 @@ const EventCard = ({ event, buttonText}) => { //id, title, description, image,
 
         {/* Title and Description */}
         <div className="p-4">
-            <h6 className="mb-2 text-slate-800 text-xl font-semibold truncate overflow-hidden whitespace-nowrap">
+            <h6 className="mb-2 text-white text-2xl font-bold truncate overflow-hidden whitespace-nowrap">
               {event.eventTitle}
             </h6>
-            <p className="text-slate-600 leading-normal font-light truncate overflow-hidden whitespace-nowrap">
+            <p className="text-white leading-normal font-medium truncate overflow-hidden whitespace-nowrap">
               {event.eventDescription}
             </p>
         </div>

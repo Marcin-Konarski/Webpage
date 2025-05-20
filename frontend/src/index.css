@@ -4,18 +4,6 @@
 
 @layer base {
   :root {
-    --background: 42 87% 94%;
-    --foreground: 222 47% 11%;
-
-    --primary: 250 47% 60%;
-    --primary-foreground: 210 40% 98%;
-
-    --blob-opacity: 1;
-
-    --card: 0, 0%, 10%;
-  }
-
-  .dark {
     --background: 222 47% 4%;
     --foreground: 213 31% 91%;
 
@@ -24,7 +12,24 @@
 
     --blob-opacity: 0.5;
 
-    --card: 0, 0%, 100%;
+    --card-bg: rgba(255, 255, 255, 0.5);
+
+    --noise-opacity: 0.2;
+  }
+
+  .light {
+    --background: 42 87% 94%;
+    --foreground: 222 47% 11%;
+
+    --primary: 250 47% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --blob-opacity: 1;
+
+    --card-bg: rgba(255, 255, 255, 0.4);
+
+    --noise-opacity: 0.3;
+
   }
 
   * {
@@ -98,17 +103,34 @@
     text-shadow: 0 0 10px rgb(var(--primary-foreground));
   }
 
-  .card {
-    @apply cursor-pointer relative flex flex-col my-6 bg-white/60 backdrop-blur-sm
-            backdrop-brightness-200 backdrop-contrast-200 shadow-md rounded-lg w-72
-            transition-shadow duration-300 border
+  .noise-texture {
+    position: relative;
   }
 
-  .gradient-border {
-    @apply relative rounded-md;
-    background: linear-gradient(to right, hsl(var(--card)), hsl(var(--card)));
-    background-clip: padding-box;
-    border: 1px solid transparent;
+  .noise-texture::before {
+    content: "";
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    @apply absolute top-0 left-0 w-full h-full border-inherit; 
+  }
+
+  .card {
+    @apply cursor-pointer relative flex flex-col my-6 shadow-md rounded-lg w-72
+            transition-shadow duration-300 backdrop-blur-md backdrop-brightness-200 noise-texture;
+    background-color: var(--card-bg);
+  }
+
+  /* this makes it so that this grainy noise-texture applies only to the card and NOT the children elemets (bc noise has z-1 and children have z-10)*/
+  .card > * {
+    @apply relative z-10;
+  }
+
+  .form {
+    @apply cursor-pointer sticky flex flex-col my-6 shadow-md rounded-lg w-1/2 min-w-72 p-10 max-w-xl mx-0
+            transition-shadow duration-300 backdrop-blur-xl backdrop-brightness-200;
+    background-color: rgb(255,255,255,0.5);
   }
 
   .button-primary {

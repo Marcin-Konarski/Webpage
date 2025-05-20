@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import { href, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { X, Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -8,8 +8,8 @@ const navItems = [
     {name: "Home", to: "/", isNewPage: false, animationDuration: 1000},
     {name: "Events", to: "#events", isNewPage: false, animationDuration: 1000},
     {name: "Create Event", to: "create_event", isNewPage: true, animationDuration: 1000},
-    {name: "Sign Up", to: "register", isNewPage: true, animationDuration: 1000},
     {name: "Log in", to: "login", isNewPage: true, animationDuration: 1000},
+    {name: "Register", to: "register", isNewPage: true, animationDuration: 1000},
 ];
 
 const NavBar = () => {
@@ -17,10 +17,10 @@ const NavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navBarHeight = 10
 
-    // This (I THINK!) makes it so that the navbar statys on top while scrolling instead of going out of the window
+    // checks if page is scrolled and modified the navbar's padding and blur accordingly
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.screenY > navBarHeight)
+            setIsScrolled(window.scrollY > navBarHeight)
         };
 
         window.addEventListener("scroll", handleScroll);
@@ -29,8 +29,17 @@ const NavBar = () => {
 
 
     return (<>
-        <nav className={cn("fixed w-full z-40 transition-all duration-300",
-                            isScrolled ? "py-3 bg-background/80 backdrop-blur-md shadow-xs" : "py-5")}>
+        <nav 
+            className={cn(
+                "fixed top-0 left-0 w-full z-40 transition-all duration-300",
+                isScrolled ? "py-3 bg-background/40 shadow-xs" : "py-5"
+            )}
+            style={{
+                WebkitMaskImage: 'linear-gradient(to bottom, black 10%, black/90 20%, black/80 30%, black/70 40%, black/60 50%, black/50 60%, black/40 70%, black/30 80%, black/20 90%, black/10 100%)',
+                maskImage: 'linear-gradient(to bottom, black 10%, black/90 20%, black/80 30%, black/70 40%, black/60 50%, black/50 60%, black/40 70%, black/30 80%, black/20 90%, black/10 100%)',
+                backdropFilter: isScrolled ? 'blur(3px)' : 'none'
+            }}
+        >
 
             <div className="container flex items-center justify-between">
 
@@ -48,7 +57,7 @@ const NavBar = () => {
 
                         return item.isNewPage
 
-                            ? (<NavLink key={item.name} to={item.to} className="group text-foreground/80 transition-colors duration-300" activestyle="true">
+                            ? (<NavLink key={item.name} to={item.to} className="group text-foreground/80 transition-colors duration-300">
                                 <span className={cn("bg-left-bottom bg-gradient-to-t from-current to-current",
                                     `bg-[length:0%_1px] bg-no-repeat group-hover:bg-[length:100%_1px] transition-all duration-${item.animationDuration} ease-out`)}>
                                     {item.name}
@@ -83,7 +92,7 @@ const NavBar = () => {
 
                             return item.isNewPage
                                 ? (<NavLink key={item.name} to={item.to} onClick={() => setIsMenuOpen(false)}
-                                className="text-foreground/80 hover:text-primary transition-colors duration-300" activestyle="true">
+                                className="text-foreground/80 hover:text-primary transition-colors duration-300">
                                     {item.name}
                                 </NavLink>)
                                 : (<a key={item.name} href={item.to} onClick={() => setIsMenuOpen(false)}
