@@ -26,7 +26,8 @@ const LoginForm = () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            credentials: "include"
         };
         try {
             const response = await fetch(url, options);
@@ -68,9 +69,7 @@ const LoginForm = () => {
                         <label htmlFor="email" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Email</label>
                     </div>
                     <input id="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} 
-                        maxLength={50} placeholder="Enter your last name" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
+                        maxLength={50} placeholder="Enter your last name" className="input-field" />
                     {error.email && (
                         <p className="text-red-500 text-sm mt-1">{error.email}</p>
                     )}
@@ -81,9 +80,7 @@ const LoginForm = () => {
                         <label htmlFor="password" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Password</label>
                     </div>
                     <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} 
-                        maxLength={50} placeholder="Enter your password" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
+                        maxLength={50} placeholder="Enter your password" className="input-field" />
                     {error.password && (
                         <p className="text-red-500 text-sm mt-1">{error.password}</p>
                     )}
@@ -103,7 +100,7 @@ const LoginForm = () => {
 
                 <button type="submit" onClick={validate} className={`py-2 px-6 border border-transparent rounded-md shadow-sm text-sm
                     font-medium text-gray-200 bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition-all`}>
-                    Sign up
+                    Log in
                 </button>
 
             </div>

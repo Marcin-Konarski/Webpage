@@ -17,7 +17,7 @@ export const EventProvider = ({ children }) => {
   const fetchEvents = async() => {
     setIsLoading(true)
     try{
-      const response = await fetch("http://127.0.0.1:5000/events");
+      const response = await fetch("http://127.0.0.1:5000/events", { credentials: "include" });
       const data = await response.json();
       setEvents(data.events || []);
       return data.events;

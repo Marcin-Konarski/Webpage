@@ -15,7 +15,7 @@ const EventsListSection = () => {
   const { events, fetchEvents } = useEventContext();
   // displayingEvents - By default diaplay 12 evelnts. (devides by 4, 3 and 2 which are the number of columns for different screen sizes)
   // After clicking on a 'Show More' button there next 12 events will be displayed etc...
-  const numberOfEventsOnScreen = 4
+  const numberOfEventsOnScreen = 8 // here 12
   const [displayingEvents, setDisplayingEvents] = useState(numberOfEventsOnScreen); 
   const currentLocation = useLocation();
   const location = currentLocation.pathname.includes(); // Here input the location of the screen that should contain this dialog
@@ -24,7 +24,7 @@ const EventsListSection = () => {
   const dialogRef = useRef(null);
   const navigate = useNavigate();
 
-
+  
   useEffect(() => {
     fetchEvents();
   }, [])
@@ -94,7 +94,7 @@ const EventsListSection = () => {
 
   return (<>
 
-    <div id="events" className="pt-24">
+    <div id="events" className="pt-24 min-h-screen">
 
       {/* Category Selection Menu */}
       {/* slidesPerView and centerInsufficientSlides ensures snapping the last slide into view and prevent swiper from scrolling too far right*/}
@@ -118,13 +118,15 @@ const EventsListSection = () => {
         ))}
       </div>
 
+      {filteredEvents.length === 0 && <div className="text-white leading-normal font-medium mt-10">Nothing to display</div>}
+
+      {filteredEvents.length > displayingEvents && ( 
+        <div className="flex justify-center">
+          <button onClick={() => showMoreEvents} className="button-primary my-5">Show More</button>
+        </div>
+      )}
     </div>
 
-    {filteredEvents.length > displayingEvents && ( 
-      <div className="flex justify-center">
-        <button onClick={() => console.log("hello")} className="">Show More</button>
-      </div>
-    )}
 
 
 

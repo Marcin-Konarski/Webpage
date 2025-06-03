@@ -59,7 +59,7 @@ def create_event():
     required = ["eventTitle", "eventDescription", "eventDate", "eventLocation", "eventCategory", "createdBy"] # TODO: Here lated add image path as necessary
     missing = [field for field in required if not data.get(field)]
     if missing:
-        return jsonify({"message": f"Missing required fields: {", ".join(missing)}"}), 400,
+        return jsonify({"message": f"Missing required fields: {', '.join(missing)}"}), 400,
 
     image_path = None
     if form.validate_on_submit():

@@ -21,7 +21,7 @@ const HeroSection = () => {
                 <div className="text-md md:text-lg mt-5 opacity-0 animate-fade-in-delay-5 flex justify-center space-x-4">
                     <NavLink className="button-primary" to="/register">Join</NavLink>
                     <a className="button-secondary" href="#events">
-                        <span className="hidden md:inline">View {" "}</span> Events {/* Here if not View Events then maybe 'Discover'? or 'Browse'? */}
+                        <span className="hidden md:inline">Browse {" "}</span> Events {/* Here if not View Events then maybe 'Discover'? or 'Browse'? */}
                     </a>
                 </div>
             </div>

@@ -133,6 +133,12 @@
     background-color: rgb(255,255,255,0.5);
   }
 
+  .input-field {
+    @apply block w-full px-4 py-2 text-gray-200 font-bold bg-transparent border
+          border-purple-700/80 rounded-md focus:border-purple-700 focus:outline-purple-700
+          placeholder:text-gray-200/90 placeholder:font-normal
+  }
+
   .button-primary {
     @apply px-6 py-2 rounded-sm bg-primary text-primary-foreground font-medium
             transition-all duration-300 hover:shadow-[0_0_10px_rgba(139,92,246,0.5)]

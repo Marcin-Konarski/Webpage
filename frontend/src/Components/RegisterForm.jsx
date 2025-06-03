@@ -31,7 +31,8 @@ const RegisterForm = () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            credentials: "include"
         };
         try {
             const response = await fetch(url, options);
@@ -81,9 +82,7 @@ const RegisterForm = () => {
                         <label htmlFor="name" className="font-bold text-lg text-gray-200 ml-3 min-w-20">First Name</label>
                     </div>
                     <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} 
-                        maxLength={50} placeholder="Enter your first name" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700")} />
+                        maxLength={50} placeholder="Enter your first name" className="input-field" />
                     {error.name && (
                         <p className="text-red-500 text-sm mt-1">{error.name}</p>
                     )}
@@ -94,9 +93,7 @@ const RegisterForm = () => {
                         <label htmlFor="surname" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Last Name</label>
                     </div>
                     <input id="surname" type="text" value={surname} onChange={(e) => setSurname(e.target.value)} 
-                        maxLength={50} placeholder="Enter your last name" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
+                        maxLength={50} placeholder="Enter your last name" className="input-field" />
                     {error.surname && (
                         <p className="text-red-500 text-sm mt-1">{error.surname}</p>
                     )}
@@ -107,9 +104,7 @@ const RegisterForm = () => {
                         <label htmlFor="email" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Email</label>
                     </div>
                     <input id="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} 
-                        maxLength={50} placeholder="Enter your last name" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
+                        maxLength={50} placeholder="Enter your last name" className="input-field" />
                     {error.email && (
                         <p className="text-red-500 text-sm mt-1">{error.email}</p>
                     )}
@@ -120,9 +115,7 @@ const RegisterForm = () => {
                         <label htmlFor="password" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Password</label>
                     </div>
                     <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} 
-                        maxLength={50} placeholder="Enter your password" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
+                        maxLength={50} placeholder="Enter your password" className="input-field" />
                     {error.password && (
                         <p className="text-red-500 text-sm mt-1">{error.password}</p>
                     )}
@@ -133,9 +126,7 @@ const RegisterForm = () => {
                         <label htmlFor="confirmPassword" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Confirm Password</label>
                     </div>
                     <input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} 
-                        maxLength={50} placeholder="Confirm your password" className={cn("block w-full px-4 py-2",
-                            "text-gray-200 bg-transparent border border-purple-700/80 rounded-md focus:border-purple-700",
-                            "focus:outline-purple-700 focus-ring")} />
+                        maxLength={50} placeholder="Confirm your password" className="input-field" />
                     {error.confirmPassword && (
                         <p className="text-red-500 text-sm mt-1">{error.confirmPassword}</p>
                     )}

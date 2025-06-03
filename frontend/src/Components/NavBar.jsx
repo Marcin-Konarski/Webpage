@@ -6,10 +6,10 @@ import { cn } from '@/lib/utils'
 
 const navItems = [
     {name: "Home", to: "/", isNewPage: false, animationDuration: 1000},
-    {name: "Events", to: "#events", isNewPage: false, animationDuration: 1000},
-    {name: "Create Event", to: "create_event", isNewPage: true, animationDuration: 1000},
-    {name: "Log in", to: "login", isNewPage: true, animationDuration: 1000},
-    {name: "Register", to: "register", isNewPage: true, animationDuration: 1000},
+    {name: "Events", to: "/#events", isNewPage: false, animationDuration: 1000},
+    {name: "Create Event", to: "/create_event", isNewPage: true, animationDuration: 1000},
+    {name: "Log in", to: "/login", isNewPage: true, animationDuration: 1000},
+    {name: "Register", to: "/register", isNewPage: true, animationDuration: 1000},
 ];
 
 const NavBar = () => {

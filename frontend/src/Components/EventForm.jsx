@@ -107,7 +107,8 @@ const EventForm = ({ isUpdating = false }) => {
         const url = `http://127.0.0.1:5000/${isUpdating ? `update_event/${existingEvent.id}` : "create_event"}`;
         const options = {
             method: isUpdating ? "PATCH" : "POST",
-            body: formData
+            body: formData,
+            credentials: "include"
         };
 
         try {

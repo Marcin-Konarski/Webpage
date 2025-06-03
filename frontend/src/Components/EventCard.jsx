@@ -25,6 +25,8 @@ const EventCard = ({ event, buttonText}) => { //id, title, description, image,
           max: 4,
           transition: true,
           easing: "cubic-bezier(.03,.98,.52,.99)",
+          disableWillChange: true,
+          gyroscope: false // gyroscope disabled bc I get warning in my browser
         });
       }
       // Clean up the effect when component unmounts

@@ -5,6 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_session import Session
 from flask_login import LoginManager
 from dotenv import load_dotenv
+from datetime import datetime
 import redis
 import os
 
@@ -60,6 +61,28 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login' # Route the redirect when login is required
 login_manager.login_message_category = 'info'
 
+# Cookie Settings
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = 'None'
+app.config["SESSION_PERMANENT"] = True,
+# app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=7)
+
+
+# @app.after_request
+# def add_partitioned_cookie_attribute(response):
+#     if 'Set-Cookie' in response.headers:
+#         cookies = response.headers.getlist('Set-Cookie')
+#         modified_cookies = []
+#         for cookie in cookies:
+#             if 'session=' in cookie and 'Partitioned' not in cookie:
+#                 modified_cookies.append(cookie + '; Partitioned')
+#             else:
+#                 modified_cookies.append(cookie)
+#         response.headers.pop('Set-Cookie')
+#         for cookie in modified_cookies:
+#             response.headers.add('Set-Cookie', cookie)
+#     return response
 
 bcrypt = Bcrypt(app)
 server_session = Session(app)
