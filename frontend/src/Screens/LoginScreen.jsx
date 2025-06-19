@@ -2,7 +2,7 @@ import React from 'react'
 import ThemeToggle from '@/Components/ThemeToggle'
 import Background from '@/Components/Background'
 import NavBar from '@/Components/NavBar'
-import LoginForm from '../Components/LoginForm'
+import LoginForm from '@/Components/LoginForm'
 
 
 const LoginScreen = () => {
@@ -20,7 +20,7 @@ const LoginScreen = () => {
       <NavBar />
 
       {/* Main Content */}
-      <div className="w-full flex items-center justify-center" style={{ marginTop: '80px', minHeight: 'calc(100vh - 80px)' }}>
+      <div className="w-full flex items-center justify-center mt-8 min-h-[calc(100vh-80px)]" style={{ marginTop: '80px', minHeight: 'calc(100vh - 80px)' }}>
         <LoginForm />
       </div>
 

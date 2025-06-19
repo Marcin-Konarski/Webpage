@@ -20,7 +20,7 @@ const RegisterScreen = () => {
       <NavBar />
 
       {/* Main Content */}
-      <div className="w-full flex items-center justify-center" style={{ marginTop: '80px', minHeight: 'calc(100vh - 80px)' }}>
+      <div className="w-full flex items-center justify-center mt-8 min-h-[calc(100vh-80px)]">
         <RegisterForm />
       </div>
 

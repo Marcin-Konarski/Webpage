@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, url_for, session, flash, redirect, render_template
+from flask import Blueprint, request, jsonify, url_for, session, flash, redirect, render_template, make_response
 from flask_login import current_user, login_user, logout_user
 from flask_mail import Mail, Message
 from config import app, db, bcrypt, login_manager
@@ -152,11 +152,43 @@ def login():
         "userEmail": user.user_email,
     }), 200
 
-@auth.route("/logout", methods=["GET"])
+@auth.route("/logout", methods=["POST"])
 def logout():
+    print("Logout route called")  # Debug print
+    print(f"Current user authenticated: {current_user.is_authenticated}")  # Debug print
+    print(f"Session before logout: {dict(session)}")  # Debug print
+    
+    # Log out the user (this clears Flask-Login's user session)
     logout_user()
-    session.pop("user_id", None)
-    return jsonify({"message": "Logout successful"}), 200
+    
+    # Clear all session data
+    session.clear()
+    
+    # Create response
+    response = make_response(jsonify({"message": "Logout successful"}), 200)
+    
+    # Get the session cookie name from Flask config (default is 'session')
+    session_cookie_name = app.config.get('SESSION_COOKIE_NAME', 'session')
+    
+    # Clear the session cookie completely
+    response.set_cookie(
+        session_cookie_name,
+        '',
+        expires=0,
+        httponly=True,
+        secure=app.config.get('SESSION_COOKIE_SECURE', False),  # Set to True in production with HTTPS
+        samesite='Lax',
+        domain=app.config.get('SESSION_COOKIE_DOMAIN'),
+        path=app.config.get('SESSION_COOKIE_PATH', '/')
+    )
+    
+    print("Logout completed")  # Debug print
+    return response
+
+@auth.route("/auth/check", methods=["GET"])
+def check_auth():
+    return jsonify({"authenticated": current_user.is_authenticated}), 200
+
 
 @auth.route("/@me", methods=["GET"])
 def get_current_user():

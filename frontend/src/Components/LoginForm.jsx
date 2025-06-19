@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils'
+import { useAuthContext } from '@/AuthContext';
 
-const LoginForm = () => {
+const LoginForm = ({ redirectToCreateEvent = false }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState({});
     const navigate = useNavigate();
+    const { setIsAuthenticated, login } = useAuthContext();
 
     const validate = async(e) => {
         e.preventDefault();
@@ -34,6 +36,7 @@ const LoginForm = () => {
             const data = await response.json();
 
             if (response.ok) {
+                setIsAuthenticated(true);
                 onSubmit();
             } else {
                 alert(data.message || "An error occurred");
@@ -41,6 +44,18 @@ const LoginForm = () => {
         } catch (error) {
             console.error("Error submitting email for validation", error);
             alert("Error: " + error.message);
+        }
+
+        // Fetch user data to display currently logged in user on NavBar
+        const result = await login({
+            userEmail: email,
+            userPassword: password,
+        });
+
+        if (result.success) {
+            onSubmit();
+        } else {
+            alert(result.error || "An error occurred");
         }
     }
 
@@ -54,46 +69,56 @@ const LoginForm = () => {
     }
 
     const onSubmit = () => {
-        navigate('/')
+        if (redirectToCreateEvent) {
+            navigate('/create_event')
+        } else {
+            navigate('/')
+        }
     }
 
 
     return (<>
-
         <section className="form">
-            <h1 className="text-3xl font-extrabold text-gray-200 mb-6 text-left capitalize">Log in</h1>
+            <h1 className="text-3xl font-extrabold text-gray-200 mb-6 text-left capitalize">{redirectToCreateEvent ? "Please Log in first" : "Log in"}</h1>
 
             <form className="space-y-3">
                 <div>
                     <div className="flex items-start">
-                        <label htmlFor="email" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Email</label>
+                        <label htmlFor="email" className="font-bold text-lg text-gray-200 text-left w-full block ml-1">Email</label>
                     </div>
                     <input id="email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} 
                         maxLength={50} placeholder="Enter your last name" className="input-field" />
                     {error.email && (
-                        <p className="text-red-500 text-sm mt-1">{error.email}</p>
+                        <p className="text-left text-red-500 text-sm ml-1">{error.email}</p>
                     )}
                 </div>
 
                 <div>
                     <div className="flex items-start">
-                        <label htmlFor="password" className="font-bold text-lg text-gray-200 ml-3 min-w-20">Password</label>
+                        <label htmlFor="password" className="font-bold text-lg text-gray-200 text-left w-full block ml-1">Password</label>
                     </div>
                     <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} 
                         maxLength={50} placeholder="Enter your password" className="input-field" />
                     {error.password && (
-                        <p className="text-red-500 text-sm mt-1">{error.password}</p>
+                        <p className="text-left text-red-500 text-sm ml-1">{error.password}</p>
                     )}
                 </div>
             </form>
 
+            <div className="mt-1 text-center">
+                <p className="font-bold text-sm text-gray-200 text-left w-full block ml-1"> Don't have an account?{" "}
+                    <button onClick={() => navigate("/register")} className="text-indigo-700 hover:underline">
+                        Create account
+                    </button>
+                </p>
+            </div>
 
             {/* Submit and Canel Button */}
             <div className="flex items-center justify-end mt-8">
                 
                 <button type="button" onClick={() => navigate('/')}
                     className="mr-4 py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-200
-                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    hover:bg-gray-50/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Cancel
                 </button>
 
@@ -104,8 +129,8 @@ const LoginForm = () => {
                 </button>
 
             </div>
-        </section>
 
+        </section>
     </> )
 }
 

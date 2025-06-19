@@ -1,6 +1,11 @@
 from config import app, db
 from models import Event, User
 
+"""
+This file is only the helper file for displaying the database. It does not fulfill any function in the applilcation.
+"""
+
+
 with app.app_context():
     events = Event.query.all()
     for event in events:

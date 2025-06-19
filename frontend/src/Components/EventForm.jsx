@@ -143,80 +143,74 @@ const EventForm = ({ isUpdating = false }) => {
     };
 
     return (<>
-        <section className="max-w-4xl p-6 mx-auto bg-gray-50 rounded-lg shadow-md mt-20">
-            <h1 className="text-3xl font-extrabold text-black capitalize ">Create Event</h1>
-            <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+        <div className="w-full min-h-[calc(100vh-80px)] flex items-start justify-center pt-12">
+        <section className="form">
+            <h1 className="text-3xl font-extrabold text-gray-200 mb-6 text-left capitalize">{isUpdating ? "Update Event" : "Create Event"}</h1>
+            <form className="grid grid-cols-1 sm:grid-cols-2 gap-6" onSubmit={onSubmit} autoComplete="off">
                 
                 {/* Title and Location */}
                 <div>
-                    <label htmlFor="eventTitle" className="font-bold text-lg text-black">Event Title</label>
-                    <input id="eventTitle" type="text" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} 
-                        maxLength={50} placeholder="Enter event title" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-transparent
-                        border border-black rounded-sm focus:border-black focus:outline-purple-700 focus-ring" />
-                    {error.eventTitle && (
-                        <p className="text-red-500 text-sm mt-1">{error.eventTitle}</p>
-                    )}
+                    <label htmlFor="eventTitle" className="font-bold text-lg text-gray-200 text-left w-full block ml-2">Event Title</label>
+                    <input id="eventTitle" type="text" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)}
+                    maxLength={50} placeholder="Enter event title" className="input-field"/>
+                    {error.eventTitle && (<p className="text-left text-red-500 text-sm mt-1">{error.eventTitle}</p>)}
                 </div>
 
                 <div>
-                    <label htmlFor="eventLocation" className="font-bold text-lg text-black">Event Location</label>
-                    <input id="eventLocation" type="text" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)} 
-                        maxLength={30} placeholder="Enter event location" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-transparent
-                        border border-black rounded-sm focus:border-black focus:outline-purple-700 focus-ring" />
-                    {error.eventLocation && (
-                        <p className="text-red-500 text-sm mt-1">{error.eventLocation}</p>
-                    )}
+                    <label htmlFor="eventLocation" className="font-bold text-lg text-gray-200 text-left w-full block ml-2"> Event Location </label>
+                    <input id="eventLocation" type="text" value={eventLocation} onChange={(e) => setEventLocation(e.target.value)}
+                    maxLength={30} placeholder="Enter event location" className="input-field"/>
+                    {error.eventLocation && (<p className="text-left text-red-500 text-sm mt-1">{error.eventLocation}</p>)}
                 </div>
-
 
                 {/* Category and Date */}
                 <div>
-                    <label htmlFor="eventCategory" className="font-bold text-lg text-black">Select Category</label>
+                    <label htmlFor="eventCategory" className="font-bold text-lg text-gray-200 text-left w-full block ml-2">Event Category</label>
                     <select id="eventCategory" value={eventCategory} onChange={(e) => setEventCategory(e.target.value)}
-                        className="block w-full px-4 py-2 mt-2 text-gray-700 bg-transparent border border-black
-                        rounded-sm focus:border-black focus:outline-purple-700 focus-ring">
+                        className="input-field">
                         <option value="" disabled>Select Category</option>
-                        {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+                        {categories.map((category) => <option key={category} value={category} className="text-black">{category}</option>)}
                     </select>
                     {error.eventCategory && (
-                        <p className="text-red-500 text-sm mt-1">{error.eventCategory}</p>
+                        <p className="text-left text-red-500 text-sm mt-1">{error.eventCategory}</p>
                     )}
                 </div>
 
                 <div>
-                    <label htmlFor="eventDate" className="font-bold text-lg text-black">Event Date</label>
+                    <label htmlFor="eventDate" className="font-bold text-lg text-gray-200 text-left w-full block ml-2">Event Date</label>
                     <input type="text" ref={datePickerRef} placeholder="Select date and time"
-                        className="block w-full px-4 py-2 mt-2 text-gray-700 bg-transparent border border-black
-                        rounded-sm focus:border-black focus:outline-purple-700 focus-ring" />
+                        className="input-field"/>
                     {error.eventDate && (
-                        <p className="text-red-500 text-sm mt-1">{error.eventDate}</p>
+                        <p className="text-left text-red-500 text-sm mt-1">{error.eventDate}</p>
                     )}
                 </div>
-            </div>
+            </form>
             
-            <div className="grid grid-cols-1 gap-4 mt-8">
+            {/* Desciption and Image */}
+            <form className="grid grid-cols-1 gap-4 mt-8">
                 <div>
-                    <label htmlFor="eventDescription" className="font-bold text-lg text-black">Event Description</label>
+                    <label htmlFor="eventDescription" className="font-bold text-lg text-gray-200 text-left w-full block ml-2">Event Description</label>
                     <textarea id="eventDescription" value={eventDescription} onChange={(e) => setEventDescription(e.target.value)} 
                         maxLength={400} placeholder="Describe what your event is about..." style={{ resize: 'none', height: '100px' }} // Fixed height, no resize
-                        className="block w-full px-4 py-2 mt-2 text-gray-700 bg-transparent border border-black
-                        rounded-sm focus:border-black focus:outline-purple-700 focus-ring" />
+                        className="input-field"/>
+                    <div className="flex justify-between mt-1">
+                        {error.eventDescription && (
+                            <p className="text-left text-red-500 text-sm mt-1">{error.eventDescription}</p>
+                        )}
                         <div className="text-right text-sm text-gray-500 mt-1">
                             {eventDescription.length}/400
                         </div>
-                    {error.eventDescription && (
-                        <p className="text-red-500 text-sm mt-1">{error.eventDescription}</p>
-                    )}
+                    </div>
                 </div>
 
                 <div>
-                    <label htmlFor="eventImage" className="font-bold text-lg text-black">Select Image</label>
+                    <label htmlFor="image" className="font-bold text-lg text-gray-200 text-left w-full block ml-2">Event Image</label>
                     
                     {/* Image preview area */}
                     {imagePreview && (
                         <div className="mt-2 mb-3 border border-gray-300 p-2 rounded-sm">
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-sm text-gray-600">Upload Image</span>
+                                <span className="text-sm text-gray-600">Uploaded Image</span>
                                 <button type="button" onClick={removeImage} className="text-red-500 text-sm hover:text-red-700">
                                     Remove
                                 </button>
@@ -226,31 +220,30 @@ const EventForm = ({ isUpdating = false }) => {
                     )}
                     
                     {/* Image upload button */}
-                    <label className="block w-full px-4 py-2 mt-2 text-gray-700 bg-transparent border border-black
-                        rounded-sm focus:border-black focus:outline-purple-700 focus-ring">
+                    <label className="input-field">
                         <span className="flex items-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round"
                                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
-                            <span className="font-medium text-gray-600">
+                            <span className="font-medium">
                                 {imagePreview ? "Change image" : "Drop files or Browse"}
                             </span>
                         </span>
                         <input type="file" accept="image/*" name="image" className="hidden" onChange={handleImageChange} />
                     </label>
                     {error.image && (
-                            <p className="text-red-500 text-sm mt-1">{error.image}</p>
+                            <p className="text-left text-red-500 text-sm mt-1">{error.image}</p>
                         )}
                 </div>
-            </div>
+            </form>
 
-            {/* Submit Button */}
+            {/* Submit and Cancel buttons */}
             <div className="flex items-center justify-end mt-8">
                 <button type="button" onClick={() => navigate('/')}
-                    className="mr-4 py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700
-                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    className="mr-4 py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-white
+                    hover:bg-gray-50/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Cancel
                 </button>
                 <button type="submit" className={`py-2 px-6 border border-transparent rounded-md shadow-sm text-sm
@@ -260,6 +253,7 @@ const EventForm = ({ isUpdating = false }) => {
                 </button>
             </div>
         </section>
+        </div>
     </>);
 };
 

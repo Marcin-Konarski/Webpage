@@ -10,6 +10,7 @@ import RegisterScreen from "@/Screens/RegisterScreen";
 import PageNotFound from "@/Screens/PageNotFound";
 import EventDeailsScreen from "@/Screens/EventDetailsScreen";
 import { EventProvider } from "@/Context";
+import { AuthProvider } from "./AuthContext";
 
 
   const router = createBrowserRouter([
@@ -46,8 +47,10 @@ import { EventProvider } from "@/Context";
 
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <EventProvider>
-        <RouterProvider router={router} />
-      </EventProvider>
+      <AuthProvider>
+        <EventProvider>
+          <RouterProvider router={router} />
+        </EventProvider>
+      </AuthProvider>
     </React.StrictMode>
   )
