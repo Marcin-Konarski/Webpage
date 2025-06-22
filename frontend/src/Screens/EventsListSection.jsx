@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { categories } from '@/lib/Constants'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useAuthContext } from '../AuthContext';
 
 
 const EventsListSection = () => {
@@ -15,16 +16,17 @@ const EventsListSection = () => {
   const { events, fetchEvents } = useEventContext();
   // displayingEvents - By default diaplay 12 evelnts. (devides by 4, 3 and 2 which are the number of columns for different screen sizes)
   // After clicking on a 'Show More' button there next 12 events will be displayed etc...
-  const numberOfEventsOnScreen = 8 // here 12
+  const numberOfEventsOnScreen = 12 // here 12
   const [displayingEvents, setDisplayingEvents] = useState(numberOfEventsOnScreen); 
   const currentLocation = useLocation();
-  const location = currentLocation.pathname.includes(); // Here input the location of the screen that should contain this dialog
+  const location = currentLocation.pathname.includes("/event/"); // Here input the location of the screen that should contain this dialog
   const params = useParams();
   const eventId = parseInt(params.eventId);
   const dialogRef = useRef(null);
   const navigate = useNavigate();
+  const { user } = useAuthContext()
 
-  
+
   useEffect(() => {
     fetchEvents();
   }, [])
@@ -46,8 +48,15 @@ const EventsListSection = () => {
     if (dialogRef.current) {
       dialogRef.current.close();
     }
-    navigate('#events');
+    navigate('/');
   }
+
+  // This checks if user clicked outside the dialog (on the dialog backdrop)
+  const handleDialogClick = (e) => {
+    if (e.target === dialogRef.current) {
+      handleCloseDialog();
+    }
+  };
 
   // Sets the current event to the based on which button is clicked in order to show appropriate event details dialog
   const currentEvent = useMemo(() => {
@@ -57,13 +66,16 @@ const EventsListSection = () => {
     return null;
   }, [events, eventId])
 
+  // this line checks if the currently logged in user is the owner/creator of the selected event in order to display the `edit` button
+  const isOwner = user && currentEvent && currentEvent.createdBy === user.id;
+
   const selectCategory = (e) => {
     // if (selectedcategory.includes(e)) { 
     //   setSelectedCategory(selectedcategory.filter((s) => s != e)) // Remove // IN THIS APPRACH THE STATE WILL UPDATE AFTER THE FUNCTION COMPLETES!
     // } else {
     //   setSelectedCategory([...selectedcategory, e]); // Add
     // }
-    setSelectedCategory( prevSelectedCategory => { // IN THIS APPROACH I WORK WITH MOST CURRENT STATE OF THE VALUE SO THE STATE UPDATES IMIDIATELY!
+    setSelectedCategory(prevSelectedCategory => { // IN THIS APPROACH I WORK WITH MOST CURRENT STATE OF THE VALUE SO THE STATE UPDATES IMIDIATELY!
       if (prevSelectedCategory.includes(e)) {
         return prevSelectedCategory.filter((p => p != e));
       } else {
@@ -121,26 +133,21 @@ const EventsListSection = () => {
       {filteredEvents.length === 0 && <div className="text-white leading-normal font-medium mt-10">Nothing to display</div>}
 
       {filteredEvents.length > displayingEvents && ( 
-        <div className="flex justify-center">
-          <button onClick={() => showMoreEvents} className="button-primary my-5">Show More</button>
+        <div className="flex justify-center relative z-10">
+          <button onClick={() => showMoreEvents()} className="button-primary my-5">Show More</button>
         </div>
       )}
     </div>
 
-
-
-
-
     {/* Dialog showing details */}
-    <dialog ref={dialogRef}
-    className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 rounded-lg shadow-xl backdrop:bg-black/50"
-    onClose={handleCloseDialog}>
-      {currentEvent ? (
-        <EventDeailsScreen event={currentEvent} onClose={handleCloseDialog}/>
-      ) : (
-        <div className='center-text'><p>Loading...</p></div>
-      )}
-    </dialog>
+      <dialog ref={dialogRef}
+        className="dialog items-center justify-center w-full max-w-md p-6 rounded-lg shadow-xl backdrop:bg-black/50 z-50"
+        onClick={handleDialogClick} onClose={handleCloseDialog}>
+        {currentEvent
+          ? (<EventDeailsScreen event={currentEvent} onClose={handleCloseDialog} isOwner={isOwner} />)
+          : (<div className='center-text'><p>Loading...</p></div>)
+        }
+      </dialog>
 
   </>)
 }

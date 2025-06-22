@@ -69,6 +69,7 @@ def confirm_email(token):
         flash("The confirmation link is invalid or has expired.", "danger")
 
     login_user(user)
+    session["user_id"] = user.id
     return redirect("http://localhost:5173/")
 
 @auth.route("/register", methods=["POST"])
@@ -193,11 +194,19 @@ def check_auth():
 @auth.route("/@me", methods=["GET"])
 def get_current_user():
     user_id = session.get("user_id")
+    
+    # If not in session but user is authenticated via Flask-Login, use current_user
+    if not user_id and current_user.is_authenticated:
+        user_id = current_user.id
+        session["user_id"] = user_id
 
     if not user_id:
         return jsonify({"message": "Unauthorized"}), 401
     
     user = User.query.filter_by(id=user_id).first()
+    
+    if not user:
+        return jsonify({"message": "User not found"}), 404
 
     return jsonify({
         "id": user.id,

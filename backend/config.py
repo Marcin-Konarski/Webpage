@@ -6,8 +6,10 @@ from flask_session import Session
 from flask_login import LoginManager
 from dotenv import load_dotenv
 from datetime import datetime
+from flask_migrate import Migrate
 import redis
 import os
+
 
 try:
     load_dotenv()
@@ -31,6 +33,7 @@ $env:EMAIL_PASSWORD = "<16 characters google app password inside quotes>"
 
 app = Flask(__name__) # Creats the app
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:5173"}})
+
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db" # Specifies the database
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -62,11 +65,14 @@ login_manager.login_view = 'login' # Route the redirect when login is required
 login_manager.login_message_category = 'info'
 
 # Cookie Settings
-app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_SECURE"] = True # True in production
 app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SAMESITE"] = 'None'
-app.config["SESSION_PERMANENT"] = True,
-# app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(days=7)
+app.config["SESSION_COOKIE_SAMESITE"] = "None" # 'None' in production other option is 'Lax' 
+app.config["SESSION_COOKIE_DOMAIN"] = None
+app.config["SESSION_COOKIE_PATH"] = "/"
+app.config["SESSION_PERMANENT"] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours        # datetime.timedelta(days=1)
+app.config["SESSION_COOKIE_NAME"] = "session"
 
 
 # @app.after_request
@@ -87,6 +93,7 @@ app.config["SESSION_PERMANENT"] = True,
 bcrypt = Bcrypt(app)
 server_session = Session(app)
 db = SQLAlchemy(app) # Creates database instance
+migrate = Migrate(app, db)
 
 
 # .env file is required in order for app to run

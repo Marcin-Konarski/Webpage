@@ -10,7 +10,7 @@ const LoginForm = ({ redirectToCreateEvent = false }) => {
     const navigate = useNavigate();
     const { setIsAuthenticated, login } = useAuthContext();
 
-    const validate = async(e) => {
+    const validate = async (e) => {
         e.preventDefault();
 
         const validationErrors = validateForm();
@@ -18,35 +18,7 @@ const LoginForm = ({ redirectToCreateEvent = false }) => {
 
         if (Object.keys(validationErrors).length > 0) return;
 
-        const url = "http://127.0.0.1:5000/login";
-        const body = {
-            userEmail: email,
-            userPassword: password,
-        };
-        const options = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body),
-            credentials: "include"
-        };
-        try {
-            const response = await fetch(url, options);
-            const data = await response.json();
-
-            if (response.ok) {
-                setIsAuthenticated(true);
-                onSubmit();
-            } else {
-                alert(data.message || "An error occurred");
-            }
-        } catch (error) {
-            console.error("Error submitting email for validation", error);
-            alert("Error: " + error.message);
-        }
-
-        // Fetch user data to display currently logged in user on NavBar
+        // Use context login function
         const result = await login({
             userEmail: email,
             userPassword: password,
@@ -54,8 +26,9 @@ const LoginForm = ({ redirectToCreateEvent = false }) => {
 
         if (result.success) {
             onSubmit();
+            window.location.reload();
         } else {
-            alert(result.error || "An error occurred");
+            console.log(result.error);
         }
     }
 

@@ -42,11 +42,11 @@ def create_event():
     event_location = data.get("eventLocation")
     event_category = data.get("eventCategory")
     created_by = data.get("createdBy") # Here just get the id of a user who created this event
-    is_finished = data.get("isFinished")
-    if is_finished and isinstance(is_finished, str):
-        is_finished = is_finished.lower() == 'true'
-    else:
-        is_finished = False
+    # is_finished = data.get("isFinished")
+    # if is_finished and isinstance(is_finished, str):
+    #     is_finished = is_finished.lower() == 'true'
+    # else:
+    #     is_finished = False
 
     try:
         event_date = parser.isoparse(raw_event_date)
@@ -59,7 +59,7 @@ def create_event():
     required = ["eventTitle", "eventDescription", "eventDate", "eventLocation", "eventCategory", "createdBy"] # TODO: Here lated add image path as necessary
     missing = [field for field in required if not data.get(field)]
     if missing:
-        return jsonify({"message": f"Missing required fields: {', '.join(missing)}"}), 400,
+        return jsonify({"message": f"Missing required fields: {', '.join(missing)}"}), 400
 
     image_path = None
     if form.validate_on_submit():
@@ -74,7 +74,7 @@ def create_event():
                       event_date = event_date,
                       event_location = event_location,
                       event_category = event_category,
-                      is_finished = is_finished,
+                    #   is_finished = is_finished,
                       event_image_path = image_path,
                       created_by = created_by
     )
@@ -103,11 +103,11 @@ def update_event(event_id):
     event.event_location = data.get("eventLocation", event.event_location)
     event.event_category = data.get("eventCategory", event.event_category)
     # event.is_finished = data.get("isFinished", str(event.is_finished)).lower() == "true" # Commented for now as I don't understand this line yet
-    is_finished = data.get("isFinished")
-    if is_finished and isinstance(is_finished, str):
-        is_finished = is_finished.lower() == 'true'
-    else:
-        is_finished = False
+    # is_finished = data.get("isFinished")
+    # if is_finished and isinstance(is_finished, str):
+    #     is_finished = is_finished.lower() == 'true'
+    # else:
+    #     is_finished = False
 
     raw_event_date = data.get("eventDate")
     if raw_event_date:

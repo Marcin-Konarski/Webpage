@@ -15,7 +15,7 @@ class Event(db.Model):
     event_date = db.Column(db.DateTime(timezone=True), nullable=False)
     event_location = db.Column(db.String(150), nullable=False)
     event_category = db.Column(db.String(50), nullable=False)
-    is_finished = db.Column(db.Boolean, default=False, nullable=False)
+    # is_finished = db.Column(db.Boolean, default=False, nullable=False)
     event_image_path  = db.Column(db.String(150), nullable=True) # TODO: make the image path not nullable
     created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # Just an ID of a user who created it
     created_by_user = db.relationship('User', backref='created_events') # This is the User object not just ID
@@ -29,7 +29,7 @@ class Event(db.Model):
             "eventDate": self.event_date.isoformat(),
             "eventLocation": self.event_location,
             "eventCategory": self.event_category,
-            "isFinished": self.is_finished,
+            # "isFinished": self.is_finished,
             "imagePath": self.event_image_path,
             "createdBy": self.created_by,
             "participants": [user.id for user in self.participants]
@@ -68,7 +68,7 @@ class User(db.Model):
         return self.is_confirmed
 
     def __repr__(self):
-        return f"<email {self.email}>" # Don't know what it does - ones I'll read up on it I'll update this comment
+        return f"<User {self.user_email}>" # Don't know what it does - ones I'll read up on it I'll update this comment
 
 event_participants = db.Table(
     'event_participants',

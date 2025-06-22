@@ -26,7 +26,6 @@ const AddEventScreen = () => {
     {/* NavBar */}
     <NavBar />
 
-
     {isAuthenticated
       ? <EventForm isUpdating={isUpdating} />
       : (<div className="w-full flex items-center justify-center" style={{ marginTop: '80px', minHeight: 'calc(100vh - 80px)' }}>

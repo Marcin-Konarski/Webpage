@@ -47,7 +47,7 @@ import { AuthProvider } from "./AuthContext";
 
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <AuthProvider>
+      <AuthProvider key={window.location.href}>   {/* This ensures React remounts the provider whenever the URL changes (e.g., ?confirmed=success), so your re-auth logic triggers cleanly */}
         <EventProvider>
           <RouterProvider router={router} />
         </EventProvider>

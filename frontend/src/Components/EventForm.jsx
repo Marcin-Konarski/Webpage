@@ -5,18 +5,20 @@ import { English } from "flatpickr/dist/l10n/default.js";
 import "flatpickr/dist/flatpickr.min.css";
 import { customFlatpickrStyles } from '@/Components/FlatpickrStyles';
 import { categories } from '@/lib/constants';
+import { useAuthContext } from "@/AuthContext";
 
 
 const EventForm = ({ isUpdating = false }) => {
     const location = useLocation();
     const { existingEvent = {} } = location.state || {};
+    const { user } = useAuthContext();
 
     const [eventTitle, setEventTitle] = useState(existingEvent?.eventTitle || "");
     const [eventDescription, setEventDescription] = useState(existingEvent?.eventDescription || "");
     const [eventDate, setEventDate] = useState(existingEvent?.eventDate || "");
     const [eventLocation, setEventLocation] = useState(existingEvent?.eventLocation || "");
     const [eventCategory, setEventCategory] = useState(existingEvent?.eventCategory || "");
-    const [isFinished, setIsFinished] = useState(existingEvent?.isFinished || false);
+    // const [isFinished, setIsFinished] = useState(existingEvent?.isFinished || false);
     const [createdBy, setCreatedBy] = useState(existingEvent?.createdBy || 0);
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -63,6 +65,12 @@ const EventForm = ({ isUpdating = false }) => {
         }
     }, []);
 
+    // This sets the created by to the id of the currently logged in user
+    useEffect(() => {
+        if (user && user.id && !isUpdating) {
+            setCreatedBy(user.id);
+        }
+    }, [user, isUpdating]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -100,7 +108,7 @@ const EventForm = ({ isUpdating = false }) => {
         formData.append("eventDate", eventDate);
         formData.append("eventLocation", eventLocation);
         formData.append("eventCategory", eventCategory);
-        formData.append("isFinished", isFinished);
+        // formData.append("isFinished", isFinished);
         formData.append("createdBy", createdBy);
         if (image) formData.append("image", image);
 
@@ -147,7 +155,6 @@ const EventForm = ({ isUpdating = false }) => {
         <section className="form">
             <h1 className="text-3xl font-extrabold text-gray-200 mb-6 text-left capitalize">{isUpdating ? "Update Event" : "Create Event"}</h1>
             <form className="grid grid-cols-1 sm:grid-cols-2 gap-6" onSubmit={onSubmit} autoComplete="off">
-                
                 {/* Title and Location */}
                 <div>
                     <label htmlFor="eventTitle" className="font-bold text-lg text-gray-200 text-left w-full block ml-2">Event Title</label>

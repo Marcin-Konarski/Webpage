@@ -127,6 +127,11 @@
     @apply relative z-10;
   }
 
+  .dialog {
+    @apply shadow-md rounded-lg w-72 transition-shadow duration-300 backdrop-blur-md backdrop-brightness-200;
+    background-color: var(--card-bg);
+  }
+
   .form {
     @apply cursor-pointer sticky flex flex-col my-6 shadow-md rounded-lg w-1/2 min-w-72 p-10 max-w-xl mx-0
             transition-shadow duration-300 backdrop-blur-xl backdrop-brightness-200;

@@ -43,20 +43,17 @@ const NavBar = () => {
         setIsMenuOpen(false); // Close mobile menu
         
         try {
-            console.log('NavBar: Starting logout...'); // Debug log
             const result = await logout();
-            console.log('NavBar: Logout result:', result); // Debug log
             
             if (result.success) {
-                console.log('NavBar: Logout successful, redirecting to home'); // Debug log
                 navigate('/'); // Redirect to home page
             } else {
-                console.error('NavBar: Logout failed:', result.error);
+                console.error('Logout failed:', result.error);
                 // Even if logout fails, redirect to home
                 navigate('/');
             }
         } catch (error) {
-            console.error('NavBar: Logout error:', error);
+            console.error('Logout error:', error);
             navigate('/'); // Redirect anyway
         } finally {
             setIsLoggingOut(false);
@@ -113,8 +110,7 @@ const NavBar = () => {
         );
     }
 
-    return (
-        <>
+    return (<>
             <nav className={cn(
                 "fixed top-0 left-0 w-full z-40 transition-all duration-300",
                 isScrolled ? "py-3 bg-background/40 shadow-xs" : "py-5"
@@ -167,7 +163,7 @@ const NavBar = () => {
                                 );
                         })}
 
-                        {/* Authenticated user section */}
+                        {/* Desktop authenticated user section */}
                         {isAuthenticated && (
                             <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-foreground/20">
                                 {user && (
@@ -192,11 +188,8 @@ const NavBar = () => {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <button 
-                        onClick={() => setIsMenuOpen((i) => !i)}
-                        className="md:hidden p-2 text-foreground z-50"
-                        aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
-                    >
+                    <button onClick={() => setIsMenuOpen((i) => !i)} className="md:hidden p-2 text-foreground z-50"
+                        aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}>
                         {isMenuOpen ? <X size={24}/> : <Menu size={24} />}
                     </button>
 
@@ -209,26 +202,14 @@ const NavBar = () => {
                         <div className="flex flex-col space-y-8 text-xl text-center">
                             {navItems.map((item) => {
                                 return item.isNewPage
-                                    ? (
-                                        <NavLink 
-                                            key={item.name} 
-                                            to={item.to} 
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                                        >
+                                    ? (<NavLink key={item.name} to={item.to} onClick={() => setIsMenuOpen(false)}
+                                            className="text-foreground/80 hover:text-primary transition-colors duration-300">
                                             {item.name}
-                                        </NavLink>
-                                    )
-                                    : (
-                                        <a 
-                                            key={item.name} 
-                                            href={item.to} 
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                                        >
+                                        </NavLink>)
+                                    : (<a key={item.name} href={item.to} onClick={() => setIsMenuOpen(false)}
+                                            className="text-foreground/80 hover:text-primary transition-colors duration-300">
                                             {item.name}
-                                        </a>
-                                    );
+                                        </a>);
                             })}
 
                             {/* Mobile authenticated user section */}
@@ -240,14 +221,9 @@ const NavBar = () => {
                                             {user.userName} {user.userSurname}
                                         </div>
                                     )}
-                                    <button
-                                        onClick={handleLogout}
-                                        disabled={isLoggingOut}
-                                        className={cn(
-                                            "text-red-500 hover:text-red-600 transition-colors duration-300 flex items-center space-x-2 mx-auto",
-                                            isLoggingOut && "opacity-50 cursor-not-allowed"
-                                        )}
-                                    >
+                                    <button onClick={handleLogout} disabled={isLoggingOut}
+                                        className={cn("text-red-500 hover:text-red-600 transition-colors duration-300",
+                                            "flex items-center space-x-2 mx-auto", isLoggingOut && "opacity-50 cursor-not-allowed")}>
                                         <LogOut size={20} />
                                         <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                                     </button>
@@ -257,8 +233,7 @@ const NavBar = () => {
                     </div>
                 </div>
             </nav>
-        </>
-    );
+        </>);
 };
 
 export default NavBar;
