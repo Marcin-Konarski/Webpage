@@ -121,9 +121,9 @@ const NavBar = () => {
                 backdropFilter: isScrolled ? 'blur(3px)' : 'none'
             }}>
 
-                <div className="container flex items-center justify-between">
+                <div className="w-full flex items-center justify-between">
                     {/* Logo */}
-                    <a className="text-xl font-bold text-primary flex items-center" href="/">
+                    <a className="text-xl px-6 font-bold text-primary flex items-center" href="/">
                         <span className="relative z-10">
                             <span className="text-glow text-foreground"> Venuo </span> Events
                         </span>

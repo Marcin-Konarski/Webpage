@@ -26,7 +26,7 @@ const LoginForm = ({ redirectToCreateEvent = false }) => {
 
         if (result.success) {
             onSubmit();
-            window.location.reload();
+            // window.location.reload();
         } else {
             console.log(result.error);
         }

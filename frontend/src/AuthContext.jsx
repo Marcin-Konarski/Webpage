@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuthStatus = async () => {
         try {
             console.log('Checking auth status...'); // Debug log
-            const url = 'http://127.0.0.1:5000/auth/check';
+            const url = 'http://localhost:5000/auth/check';
             const response = await axios.get(url, { withCredentials: true });
             console.log('Auth check response:', response.data); // Debug log
             
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
             // If authenticated, get user data
             if (authenticated) {
                 try {
-                    const userResponse = await axios.get('http://127.0.0.1:5000/@me', { withCredentials: true });
+                    const userResponse = await axios.get('http://localhost:5000/@me', { withCredentials: true });
                     setUser(userResponse.data);
                     console.log('User data:', userResponse.data); // Debug log
                 } catch (userError) {
@@ -56,13 +56,13 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try {
-            const url = 'http://127.0.0.1:5000/login';
+            const url = 'http://localhost:5000/login';
             const response = await axios.post(url, credentials, { withCredentials: true });
 
             setIsAuthenticated(true);
 
             // Always fetch user info after login
-            const userResponse = await axios.get('http://127.0.0.1:5000/@me', { withCredentials: true });
+            const userResponse = await axios.get('http://localhost:5000/@me', { withCredentials: true });
             setUser(userResponse.data);
 
             setLoading(false);
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             console.log('Attempting logout...'); // Debug log
-            const url = 'http://127.0.0.1:5000/logout';
+            const url = 'http://localhost:5000/logout';
             const response = await axios.post(url, {}, { withCredentials: true });
             console.log('Logout response:', response.data); // Debug log
             

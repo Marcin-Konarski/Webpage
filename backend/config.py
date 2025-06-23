@@ -47,7 +47,7 @@ app.config["SESSION_TYPE"] = "filesystem" # "redis"
 app.config["SESSION_PERMAMENT"] = False
 app.config["SESSION_USE_SIGNER"] = True
 app.config["SESSION_FILE_DIR"] = "flask_session"
-# app.config["SESSION_REDIS"] = redis.from_url("redis://127.0.0.1:6379") # "redis://172.17.29.126:6379"
+# app.config["SESSION_REDIS"] = redis.from_url("redis://localhost:6379") # "redis://172.17.29.126:6379"
 
 # For sending emails and email verification
 app.config["MAIL_DEFAULT_SENDER"] = "noreply@flask.com"

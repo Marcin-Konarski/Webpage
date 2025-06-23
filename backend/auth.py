@@ -171,18 +171,18 @@ def logout():
     # Get the session cookie name from Flask config (default is 'session')
     session_cookie_name = app.config.get('SESSION_COOKIE_NAME', 'session')
     
-    # Clear the session cookie completely
+    # Clear the session cookie completely - NO WARNING VERSION
     response.set_cookie(
         session_cookie_name,
         '',
         expires=0,
         httponly=True,
-        secure=app.config.get('SESSION_COOKIE_SECURE', False),  # Set to True in production with HTTPS
-        samesite='Lax',
-        domain=app.config.get('SESSION_COOKIE_DOMAIN'),
+        secure=False,  # ! TODO: Change thi to True in production
+        samesite='Lax',  # 'Lax' or 'None'
+        domain='localhost',
         path=app.config.get('SESSION_COOKIE_PATH', '/')
     )
-    
+
     print("Logout completed")  # Debug print
     return response
 
@@ -202,9 +202,9 @@ def get_current_user():
 
     if not user_id:
         return jsonify({"message": "Unauthorized"}), 401
-    
+
     user = User.query.filter_by(id=user_id).first()
-    
+
     if not user:
         return jsonify({"message": "User not found"}), 404
 
