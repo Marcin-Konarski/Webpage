@@ -141,7 +141,7 @@ const EventsListSection = () => {
 
     {/* Dialog showing details */}
       <dialog ref={dialogRef}
-        className="dialog items-center justify-center w-full max-w-md p-6 rounded-lg shadow-xl backdrop:bg-black/50 z-50"
+        className="dialog items-center justify-center w-full max-w-md rounded-lg shadow-xl backdrop:bg-black/50 z-50"
         onClick={handleDialogClick} onClose={handleCloseDialog}>
         {currentEvent
           ? (<EventDeailsScreen event={currentEvent} onClose={handleCloseDialog} isOwner={isOwner} />)

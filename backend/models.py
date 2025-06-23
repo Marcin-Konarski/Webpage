@@ -32,7 +32,8 @@ class Event(db.Model):
             # "isFinished": self.is_finished,
             "imagePath": self.event_image_path,
             "createdBy": self.created_by,
-            "participants": [user.id for user in self.participants]
+            "participants": [{"id": user.id, "name": f"{user.user_name} {user.user_surname}"} for user in self.participants],
+            "participantCount": len(self.participants)
         }
 
 
