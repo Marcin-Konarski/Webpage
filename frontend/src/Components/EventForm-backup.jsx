@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import flatpickr from "flatpickr";
 import { English } from "flatpickr/dist/l10n/default.js";
 import "flatpickr/dist/flatpickr.min.css";
@@ -10,11 +10,8 @@ import { useAuthContext } from "@/AuthContext";
 
 const EventForm = ({ isUpdating = false }) => {
     const location = useLocation();
-    const params = useParams();
     const { existingEvent = {} } = location.state || {};
     const { user } = useAuthContext();
-
-    const eventId = params.eventId || existingEvent.id;
 
     const [eventTitle, setEventTitle] = useState(existingEvent?.eventTitle || "");
     const [eventDescription, setEventDescription] = useState(existingEvent?.eventDescription || "");
@@ -31,44 +28,7 @@ const EventForm = ({ isUpdating = false }) => {
     const datePickerRef = useRef(null);
 
     const API_BASE = "https://api-venuo.mk0x.com"
-    // const API_BASE = "http://localhost:5000"
-
-    // this fetches events if updating is true
-    useEffect(() => {
-        if (isUpdating && eventId && !existingEvent.id) {
-            fetchEventData();
-        }
-    }, [isUpdating, eventId, existingEvent.id]);
-
-
-    const fetchEventData = async () => {
-        try {
-            const response = await fetch(`${API_BASE}/event/${eventId}`, {
-                credentials: 'include'
-            });
-            
-            if (response.ok) {
-                const eventData = await response.json();
-                setEventTitle(eventData.eventTitle || "");
-                setEventDescription(eventData.eventDescription || "");
-                setEventDate(eventData.eventDate || "");
-                setEventLocation(eventData.eventLocation || "");
-                setEventCategory(eventData.eventCategory || "");
-                setCreatedBy(eventData.createdBy || 0);
-                
-                // Set image preview if event has an image
-                if (eventData.imagePath) {
-                    setImagePreview(eventData.imagePath);
-                }
-            } else {
-                console.error('Failed to fetch event data');
-                navigate('/'); // Redirect if event not found
-            }
-        } catch (error) {
-            console.error('Error fetching event data:', error);
-            navigate('/');
-        }
-    };
+    // const API_BASE = "http://localhost:5000"    
 
     // Add the custom styles to the document
     useEffect(() => {
@@ -115,49 +75,25 @@ const EventForm = ({ isUpdating = false }) => {
         }
     }, [user, isUpdating]);
 
-
-//    const validateForm = () => {
-//        const newErrors = {};
-//
-//        if (!eventTitle.trim()) newErrors.eventTitle = "Title is required";
-//        if (!eventDescription.trim()) newErrors.eventDescription = "Description is required";
-//        if (!eventLocation.trim()) newErrors.eventLocation = "Location is required";
-//        if (!eventCategory) newErrors.eventCategory = "Category is required";
-//        if (!eventDate) newErrors.eventDate = "Date is required";
-//
-//        if (!image) {
-//            newErrors.image = "Image is required";
-//        } else {
-//            const allowedTypes = ["image/jpeg", "image/png"];
-//            if (!allowedTypes.includes(image.type)) {
-//                newErrors.image = "Only JPG or PNG files are allowed";
-//            }
-//        }
-//
-//        return newErrors;
-//    };
-
-
     const validateForm = () => {
-        const errors = {};
+        const newErrors = {};
 
-        if (!eventTitle.trim()) errors.eventTitle = "Event title is required";
-        if (!eventDescription.trim()) errors.eventDescription = "Event description is required";
-        if (!eventDate) errors.eventDate = "Event date is required";
-        if (!eventLocation.trim()) errors.eventLocation = "Event location is required";
-        if (!eventCategory) errors.eventCategory = "Event category is required";
-    
-        // Fix image validation - only require image for new events OR if no existing image
-        if (!isUpdating) {
-            // For new events, image is required
-            if (!image) errors.image = "Event image is required";
+        if (!eventTitle.trim()) newErrors.eventTitle = "Title is required";
+        if (!eventDescription.trim()) newErrors.eventDescription = "Description is required";
+        if (!eventLocation.trim()) newErrors.eventLocation = "Location is required";
+        if (!eventCategory) newErrors.eventCategory = "Category is required";
+        if (!eventDate) newErrors.eventDate = "Date is required";
+
+        if (!image) {
+            newErrors.image = "Image is required";
         } else {
-            // For updates, image is only required if there's no existing image AND no new image
-            if (!image && !imagePreview) {
-                errors.image = "Event image is required";
+            const allowedTypes = ["image/jpeg", "image/png"];
+            if (!allowedTypes.includes(image.type)) {
+                newErrors.image = "Only JPG or PNG files are allowed";
             }
         }
-        return errors;
+
+        return newErrors;
     };
 
 
@@ -175,13 +111,11 @@ const EventForm = ({ isUpdating = false }) => {
         formData.append("eventDate", eventDate);
         formData.append("eventLocation", eventLocation);
         formData.append("eventCategory", eventCategory);
+        // formData.append("isFinished", isFinished);
         formData.append("createdBy", createdBy);
         if (image) formData.append("image", image);
 
-        // Use eventId from params or existingEvent
-        const updateId = eventId || existingEvent.id;
-        const url = `${API_BASE}/${isUpdating ? `update_event/${updateId}` : "create_event"}`;
-        
+        const url = `${API_BASE}/${isUpdating ? `update_event/${existingEvent.id}` : "create_event"}`;
         const options = {
             method: isUpdating ? "PATCH" : "POST",
             body: formData,
@@ -199,7 +133,6 @@ const EventForm = ({ isUpdating = false }) => {
             }
         } catch (error) {
             console.error("Error submitting event:", error);
-            alert("Failed to submit event. Please try again.");
         }
     };
 

@@ -11,6 +11,9 @@ export function useAuthContext() {
     return context
 }
 
+const API_BASE = "https://api-venuo.mk0x.com"
+// const API_BASE = "http://localhost:5000"
+
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -19,10 +22,10 @@ export const AuthProvider = ({ children }) => {
     // Function to check authentication status
     const checkAuthStatus = async () => {
         try {
-            console.log('Checking auth status...'); // Debug log
-            const url = 'http://localhost:5000/auth/check';
+            //console.log('Checking auth status...'); // Debug log
+            const url = `${API_BASE}/auth/check`;
             const response = await axios.get(url, { withCredentials: true });
-            console.log('Auth check response:', response.data); // Debug log
+            //console.log('Auth check response:', response.data); // Debug log
             
             const authenticated = response.data.authenticated;
             setIsAuthenticated(authenticated);
@@ -30,18 +33,18 @@ export const AuthProvider = ({ children }) => {
             // If authenticated, get user data
             if (authenticated) {
                 try {
-                    const userResponse = await axios.get('http://localhost:5000/@me', { withCredentials: true });
+                    const userResponse = await axios.get(`${API_BASE}/@me`, { withCredentials: true });
                     setUser(userResponse.data);
-                    console.log('User data:', userResponse.data); // Debug log
+                    //console.log('User data:', userResponse.data); // Debug log
                 } catch (userError) {
-                    console.error('Failed to fetch user data:', userError);
+                    //console.error('Failed to fetch user data:', userError);
                     setUser(null);
                 }
             } else {
                 setUser(null);
             }
         } catch (error) {
-            console.error('Auth check failed:', error); // Debug log
+            //console.error('Auth check failed:', error); // Debug log
             setIsAuthenticated(false);
             setUser(null);
         } finally {
@@ -56,13 +59,13 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try {
-            const url = 'http://localhost:5000/login';
+            const url = `${API_BASE}/login`;
             const response = await axios.post(url, credentials, { withCredentials: true });
 
             setIsAuthenticated(true);
 
             // Always fetch user info after login
-            const userResponse = await axios.get('http://localhost:5000/@me', { withCredentials: true });
+            const userResponse = await axios.get(`${API_BASE}/@me`, { withCredentials: true });
             setUser(userResponse.data);
 
             setLoading(false);
@@ -80,23 +83,22 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            console.log('Attempting logout...'); // Debug log
-            const url = 'http://localhost:5000/logout';
+            //console.log('Attempting logout...'); // Debug log
+            const url = `${API_BASE}/logout`;
             const response = await axios.post(url, {}, { withCredentials: true });
-            console.log('Logout response:', response.data); // Debug log
+            //console.log('Logout response:', response.data); // Debug log
             
             // Update state immediately
             setIsAuthenticated(false);
             setUser(null);
             
-            // Optional: Verify logout by checking auth status
             setTimeout(() => {
                 checkAuthStatus();
             }, 100);
             
             return { success: true };
         } catch (error) {
-            console.error('Logout failed:', error); // Debug log
+            //console.error('Logout failed:', error); // Debug log
             
             // Even if logout request fails, clear local state
             setIsAuthenticated(false);

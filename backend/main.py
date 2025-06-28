@@ -90,6 +90,9 @@ def create_event():
 # Update
 @app.route("/update_event/<int:event_id>", methods=["PATCH"])
 def update_event(event_id):
+    if not event_id:
+        return jsonify({"message": "Event ID is required"}), 400
+
     event = Event.query.get(event_id)
 
     if not event:
@@ -182,4 +185,4 @@ if __name__ == "__main__":
     with app.app_context(): # If there is no database then create it
         db.create_all()
 
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)

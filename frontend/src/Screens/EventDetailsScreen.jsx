@@ -12,6 +12,7 @@ const EventDetailsScreen = ({ event, onClose, isOwner = false }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const isUserParticipant = user && currentEvent.participants?.some(p => p.id === user.id);
+    const API_BASE = "https://api-venuo.mk0x.com"
 
     const onJoinEvent = async () => {
         if (!isAuthenticated) {
@@ -23,7 +24,7 @@ const EventDetailsScreen = ({ event, onClose, isOwner = false }) => {
         const operation = isUserParticipant ? 'remove' : 'add';
         
         try {
-            const response = await fetch(`http://localhost:5000/update_participants/${currentEvent.id}`, {
+            const response = await fetch(`${API_BASE}/update_participants/${currentEvent.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -49,12 +50,12 @@ const EventDetailsScreen = ({ event, onClose, isOwner = false }) => {
                     };
                 });
                 
-                console.log(operation === 'remove' ? 'Successfully left the event!' : 'Successfully joined the event!');
+                //console.log(operation === 'remove' ? 'Successfully left the event!' : 'Successfully joined the event!');
             } else {
                 alert(data.message || 'Failed to update participation');
             }
         } catch (error) {
-            console.error('Error updating participation:', error);
+            //console.error('Error updating participation:', error);
             alert('Failed to update participation');
         } finally {
             setIsLoading(false);

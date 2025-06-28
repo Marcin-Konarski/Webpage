@@ -12,6 +12,8 @@ export function useEventContext() {
   return context
 }
 
+const API_BASE = "https://api-venuo.mk0x.com";
+
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,12 +21,12 @@ export const EventProvider = ({ children }) => {
   const fetchEvents = async() => {
     setIsLoading(true)
     try{
-      const response = await fetch("http://localhost:5000/events", { credentials: "include" });
+      const response = await fetch(`${API_BASE}/events`, { credentials: "include" });
       const data = await response.json();
       setEvents(data.events || []);
       return data.events;
     } catch (error) {
-      console.log("Failed to fetch events: ", error);
+      //console.log("Failed to fetch events: ", error);
       return [];
     } finally {
       setIsLoading(false);
@@ -44,4 +46,5 @@ export const EventProvider = ({ children }) => {
     </EventContext.Provider>
   )
 }
+
 

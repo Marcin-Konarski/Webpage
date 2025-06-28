@@ -118,7 +118,7 @@
 
   .card {
     @apply cursor-pointer relative flex flex-col my-6 shadow-md rounded-lg w-72
-            transition-shadow duration-300 backdrop-blur-md backdrop-brightness-200 noise-texture;
+            transition-shadow duration-300 backdrop-blur-md backdrop-brightness-200 md:noise-texture;
     background-color: var(--card-bg);
   }
 

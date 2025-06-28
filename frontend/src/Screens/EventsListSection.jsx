@@ -94,19 +94,15 @@ const EventsListSection = () => {
 
   }, [selectedcategory, events]);
 
-  useEffect(() => {
-    console.log(displayingEvents);
-  }, [displayingEvents]);
-
   const showMoreEvents = () => {
-    console.log("Show more button clicked");
+    //console.log("Show more button clicked");
     setDisplayingEvents((prev) => (prev + numberOfEventsOnScreen)); // this increases the number of displaying events
   };
 
 
   return (<>
 
-    <div id="events" className="pt-24 min-h-screen">
+    <div id="events" className="pt-24 min-h-screen px-5">
 
       {/* Category Selection Menu */}
       {/* slidesPerView and centerInsufficientSlides ensures snapping the last slide into view and prevent swiper from scrolling too far right*/}

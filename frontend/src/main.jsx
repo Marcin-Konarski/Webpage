@@ -11,6 +11,7 @@ import PageNotFound from "@/Screens/PageNotFound";
 import EventDeailsScreen from "@/Screens/EventDetailsScreen";
 import { EventProvider } from "@/Context";
 import { AuthProvider } from "./AuthContext";
+import EmailConfirmation from "./Components/EmailConfirmation";
 
 
   const router = createBrowserRouter([
@@ -41,6 +42,10 @@ import { AuthProvider } from "./AuthContext";
       path: '/register',
       element: <RegisterScreen />,
     },
+    {
+      path: '/confirm/:token',
+      element: <EmailConfirmation />,
+    }
     
   ]);
 

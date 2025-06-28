@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, url_for, session, flash, redirect, render_template, make_response
+from flask import Blueprint, request, jsonify, url_for, session, flash, redirect, render_template, make_response, current_app
 from flask_login import current_user, login_user, logout_user
 from flask_mail import Mail, Message
 from config import app, db, bcrypt, login_manager
@@ -6,10 +6,17 @@ from functools import wraps
 from itsdangerous import URLSafeTimedSerializer
 from models import db, User
 import os
+from email_service import send_email_via_api
+
 
 # Create a Blueprint for authentication routes
 auth = Blueprint('auth', __name__)
 mail = Mail(app)
+
+
+API_BASE = "https://venuo.mk0x.com"
+
+
 
 # Decorator to check if the user is already authenticated and redirect to home page if so
 def logout_required(func):
@@ -50,76 +57,173 @@ def send_mail(to, subject, message_file, email):
     )
     email.send(email_message)
 
-@auth.route('/confirm/<token>', methods=["GET"])
-def confirm_email(token):
-    email = confirm_token(token)
-    if not email:
-        flash("The confirmation link is invalid or has expired.", "danger")
-        return redirect("http://localhost:5173/register")
-    user = User.query.filter_by(user_email=email).first()
-    if user.is_confirmed:
-        flash("Account already confirmed.", "success")
-        return redirect("http://localhost:5173/")
-    if user.user_email == email:
-        user.is_confirmed = True
-        db.session.add(user)
-        db.session.commit()
-        flash("You have confirmed your account. Thanks!", "success")
-    else:
-        flash("The confirmation link is invalid or has expired.", "danger")
+# @auth.route("/confirm/<token>", methods=["GET"])
+# def confirm_email(token):
+#     email = confirm_token(token)
+#     if not email:
+#         flash("The confirmation link is invalid or has expired.", "danger")
+#         return redirect(f"{API_BASE}/register")
+#     user = User.query.filter_by(user_email=email).first()
+#     if user.is_confirmed:
+#         flash("Account already confirmed.", "success")
+#         return redirect(f"{API_BASE}/")
+#     if user.user_email == email:
+#         user.is_confirmed = True
+#         db.session.add(user)
+#         db.session.commit()
+#         flash("You have confirmed your account. Thanks!", "success")
+#     else:
+#         flash("The confirmation link is invalid or has expired.", "danger")
 
-    login_user(user)
-    session["user_id"] = user.id
-    return redirect("http://localhost:5173/")
+#     login_user(user)
+#     session["user_id"] = user.id
+#     return redirect(f"{API_BASE}/")
+
+
+@auth.route("/confirm/<token>", methods=["GET"])
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+        if not email:
+            return jsonify({"message": "Invalid or expired confirmation link"}), 400
+            
+        user = User.query.filter_by(user_email=email).first()
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+            
+        if user.is_confirmed:
+            return jsonify({"message": "Email already confirmed"}), 200
+            
+        if user.user_email == email:
+            user.is_confirmed = True
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({"message": "Email confirmed successfully"}), 200
+        else:
+            return jsonify({"message": "The confirmation link is invalid or has expired."}), 400
+        
+        
+    except Exception as e:
+        print(f"Email confirmation error: {e}")
+        return jsonify({"message": "Email confirmation failed"}), 500
+
+#@auth.route("/register", methods=["POST"])
+#def register():
+#    print("here\n\n")
+#    data = request.json
+#    name = data.get("userName")
+#    surname = data.get("userSurname")
+#    email = data.get("userEmail")
+#    password = data.get("userPassword")
+#
+#    user_exists = User.query.filter_by(user_email=email).first() is not None # This will return True if the user with that email exists
+#    if user_exists:
+#        return jsonify({"message": "User with this email alredy exists"}), 409
+#
+#    raw_hashed_password = bcrypt.generate_password_hash(password)
+#    str_hashed_password = raw_hashed_password.decode("utf-8")
+#    new_user = User(
+#        user_name = name,
+#        user_surname = surname,
+#        user_email = email,
+#        user_password = str_hashed_password,
+#        is_confirmed = False,
+#    )
+#
+#    db.session.add(new_user)
+#    db.session.commit()
+#
+#    token = generate_token(email)
+#    # confirm_url = url_for("auth.confirm_email", token=token, _external=True)
+#    confirm_url = f"http://venuo.mk0x.com/confirm/{token}"
+#    print(confirm_url)
+#    subject = "Please confirm your email"
+#    try:
+#        app.template_folder = os.path.abspath('templates')
+#        html = render_template("confirm_email.html", confirm_url=confirm_url) # Flask looks in templates directory automatically
+#
+#        send_mail(new_user.user_email, subject, html, mail)
+#        
+#        flash("A confirmation email has been sent via email.", "success")
+#    except Exception as e:
+#        print(f"Error sending confirmation email: {e}")
+#        flash("Registration successful, but we couldn't send a confirmation email. Please contact support.", "warning")
+#
+#    return jsonify({
+#        "id": new_user.id,
+#        "userName": new_user.user_name,
+#        "userSurname": new_user.user_surname,
+#        "userEmail": new_user.user_email,
+#        "message": "Registration successful. Please check your email to confirm your account."
+#    }), 201
+
+
+
+
+
 
 @auth.route("/register", methods=["POST"])
 def register():
-    print("here\n\n")
+    print("Registration started")
     data = request.json
     name = data.get("userName")
     surname = data.get("userSurname")
     email = data.get("userEmail")
     password = data.get("userPassword")
 
-    user_exists = User.query.filter_by(user_email=email).first() is not None # This will return True if the user with that email exists
+    user_exists = User.query.filter_by(user_email=email).first() is not None
     if user_exists:
-        return jsonify({"message": "User with this email alredy exists"}), 409
+        return jsonify({"message": "User with this email already exists"}), 409
 
     raw_hashed_password = bcrypt.generate_password_hash(password)
     str_hashed_password = raw_hashed_password.decode("utf-8")
     new_user = User(
-        user_name = name,
-        user_surname = surname,
-        user_email = email,
-        user_password = str_hashed_password,
-        is_confirmed = False,
+        user_name=name,
+        user_surname=surname,
+        user_email=email,
+        user_password=str_hashed_password,
+        is_confirmed=False,
     )
 
     db.session.add(new_user)
     db.session.commit()
 
     token = generate_token(email)
-    confirm_url = url_for("auth.confirm_email", token=token, _external=True)
-    print(confirm_url)
-    subject = "Please confirm your email"
+    confirm_url = f"https://venuo.mk0x.com/confirm/{token}"
+    print(f"Confirmation URL: {confirm_url}")
+
+    subject = "Please confirm your email - Venuo Events"
     try:
         app.template_folder = os.path.abspath('templates')
-        html = render_template("confirm_email.html", confirm_url=confirm_url) # Flask looks in templates directory automatically
-
-        send_mail(new_user.user_email, subject, html, mail)
+        html = render_template("confirm_email.html", confirm_url=confirm_url)
         
-        flash("A confirmation email has been sent via email.", "success")
+        # Use HTTP API instead of SMTP
+        send_email_via_api(new_user.user_email, subject, html)
+        print("Email sent successfully via API!")
+        
+        return jsonify({
+            "id": new_user.id,
+            "userName": new_user.user_name,
+            "userSurname": new_user.user_surname,
+            "userEmail": new_user.user_email,
+            "message": "Registration successful! Please check your email to confirm your account."
+        }), 201
+        
     except Exception as e:
         print(f"Error sending confirmation email: {e}")
-        flash("Registration successful, but we couldn't send a confirmation email. Please contact support.", "warning")
+        return jsonify({
+            "id": new_user.id,
+            "userName": new_user.user_name,
+            "userSurname": new_user.user_surname,
+            "userEmail": new_user.user_email,
+            "message": "Registration successful, but email sending failed. Please contact support.",
+            "warning": str(e)
+        }), 201
 
-    return jsonify({
-        "id": new_user.id,
-        "userName": new_user.user_name,
-        "userSurname": new_user.user_surname,
-        "userEmail": new_user.user_email,
-        "message": "Registration successful. Please check your email to confirm your account."
-    }), 201
+
+
+
+
 
 
 @auth.route("/login", methods=["POST"])
@@ -176,10 +280,10 @@ def logout():
         session_cookie_name,
         '',
         expires=0,
-        httponly=True,
-        secure=False,  # ! TODO: Change thi to True in production
-        samesite='Lax',  # 'Lax' or 'None'
-        domain='localhost',
+        httponly=app.config.get('SESSION_COOKIE_HTTPONLY', True),
+        secure=app.config.get('SESSION_COOKIE_SECURE', True),
+        samesite=app.config.get('SESSION_COOKIE_SAMESITE', 'None'),
+        domain=app.config.get('SESSION_COOKIE_DOMAIN'),
         path=app.config.get('SESSION_COOKIE_PATH', '/')
     )
 
@@ -214,4 +318,5 @@ def get_current_user():
         "userSurname": user.user_surname,
         "userEmail": user.user_email,
     })
+
 

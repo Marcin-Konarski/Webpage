@@ -9,8 +9,8 @@ const HeroSection = () => {
 
             {/* Main Text - Title */}
             <div className="space-y-6">
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-                    <span className="opacity-0 animate-fade-in-delay-1 transition-colors duration-300">Your Events,</span> {" "}
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight flex flex-wrap justify-center">
+                    <span className="opacity-0 animate-fade-in-delay-1 transition-colors duration-300">Your Events,&nbsp;</span>
                     <span className="opacity-0 animate-fade-in-delay-2 transition-colors duration-300 text-primary">Your Way</span>
                 </h1>
                 <p className="text-md md:text:xl text-muted-foreground transition-colors duration-300 opacity-0 animate-fade-in-delay-4 max-2-2xl mx-auto">
