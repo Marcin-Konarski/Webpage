@@ -161,9 +161,9 @@ Venuo/
    The backend will start on `http://localhost:5000`
 
 7. **Or for production**
-```bash
-gunicorn --bind 127.0.0.1:5000 --workers 1 wsgi:app
-```
+   ```bash
+   gunicorn --bind 127.0.0.1:5000 --workers 1 wsgi:app
+   ```
 
 ### Frontend Setup
 
@@ -188,10 +188,10 @@ gunicorn --bind 127.0.0.1:5000 --workers 1 wsgi:app
    The frontend will start on `http://localhost:5173`
 
 4. **Or for production**
-```bash
-npm run build
-serve -s dist -l 3000
-```
+   ```bash
+   npm run build
+   serve -s dist -l 3000
+   ```
 
 ### Environment Configuration
 
