@@ -412,4 +412,5 @@ This project is licensed under the MIT License
 **You can visit the website by following this link:** [https://venuo.mk0x.com](https://venuo.mk0x.com)
 
 ***Built with ❤️ by Marcin Konarski***
+
 *Feel free to explore the webpage and create your own events!*
