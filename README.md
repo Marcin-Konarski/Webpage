@@ -59,52 +59,52 @@ A modern, full-stack event management website built with React and Flask. Venuo 
 
 ```
 Venuo/
-├── backend/                    # Flask backend application
-│   ├── auth.py                # Authentication routes and logic
-│   ├── config.py              # Flask configuration and setup
-│   ├── main.py                # Main application routes
-│   ├── models.py              # Database models and schemas
-│   ├── requirements.txt       # Python dependencies
-│   ├── templates/             # Email templates
-│   │   └── confirm_email.html # Email confirmation template
-│   ├── images/                # Uploaded event images
-│   ├── migrations/            # Database migration files
-│   ├── flask_session/         # Session storage
-│   └── instance/              # SQLite database location
-├── frontend/                   # React frontend application
+├── backend/                                  # Flask backend application
+│   ├── auth.py                               # Authentication routes and logic
+│   ├── config.py                             # Flask configuration and setup
+│   ├── main.py                               # Main application routes
+│   ├── models.py                             # Database models and schemas
+│   ├── requirements.txt                      # Python dependencies
+│   ├── templates/                            # Email templates
+│   │   └── confirm_email.html                # Email confirmation template
+│   ├── images/                               # Uploaded event images
+│   ├── migrations/                           # Database migration files
+│   ├── flask_session/                        # Session storage
+│   └── instance/                             # SQLite database location
+├── frontend/                                 # React frontend application
 │   ├── src/
-│   │   ├── main.jsx           # Application entry point
-│   │   ├── index.css          # Global styles and Tailwind
-│   │   ├── AuthContext.jsx    # Authentication context
-│   │   ├── Context.jsx        # Event context
-│   │   ├── Components/        # Reusable React components
-│   │   │   ├── Background.jsx # Animated background
-│   │   │   ├── NavBar.jsx     # Navigation component
-│   │   │   ├── LoginForm.jsx  # Login form
-│   │   │   ├── RegisterForm.jsx # Registration form
-│   │   │   ├── EventForm.jsx  # Event creation/editing
-│   │   │   ├── EventCard.jsx  # Event display card
-│   │   │   ├── EmailConfirmation.jsx # Email verification
-│   │   │   └── ThemeToggle.jsx # Dark/light theme toggle
-│   │   ├── Screens/           # Page components
-│   │   │   ├── HomeScreen.jsx # Main landing page
-│   │   │   ├── LoginScreen.jsx # Login page
-│   │   │   ├── RegisterScreen.jsx # Registration page
-│   │   │   ├── CreateEditEventScreen.jsx # Event management
-│   │   │   ├── EventDetailsScreen.jsx # Event details modal
-│   │   │   ├── EventsListSection.jsx # Event listing
-│   │   │   ├── HeroSection.jsx # Landing hero section
-│   │   │   └── PageNotFound.jsx # 404 error page
-│   │   └── lib/               # Utility functions
-│   │       ├── utils.js       # Tailwind utilities
-│   │       └── Constants.jsx  # Event categories
-│   ├── public/                # Static assets
-│   ├── package.json           # Node.js dependencies
-│   ├── vite.config.js         # Vite configuration
-│   ├── tailwind.config.js     # Tailwind configuration
-│   └── postcss.config.js      # PostCSS configuration
-├── .gitignore                 # Git ignore rules
-└── README.md                  # This file
+│   │   ├── main.jsx                          # Application entry point
+│   │   ├── index.css                         # Global styles and Tailwind
+│   │   ├── AuthContext.jsx                   # Authentication context
+│   │   ├── Context.jsx                       # Event context
+│   │   ├── Components/                       # Reusable React components
+│   │   │   ├── Background.jsx                # Animated background
+│   │   │   ├── NavBar.jsx                    # Navigation component
+│   │   │   ├── LoginForm.jsx                 # Login form
+│   │   │   ├── RegisterForm.jsx              # Registration form
+│   │   │   ├── EventForm.jsx                 # Event creation/editing
+│   │   │   ├── EventCard.jsx                 # Event display card
+│   │   │   ├── EmailConfirmation.jsx         # Email verification
+│   │   │   └── ThemeToggle.jsx               # Dark/light theme toggle
+│   │   ├── Screens/                          # Page components
+│   │   │   ├── HomeScreen.jsx                # Main landing page
+│   │   │   ├── LoginScreen.jsx               # Login page
+│   │   │   ├── RegisterScreen.jsx            # Registration page
+│   │   │   ├── CreateEditEventScreen.jsx     # Event management
+│   │   │   ├── EventDetailsScreen.jsx        # Event details modal
+│   │   │   ├── EventsListSection.jsx         # Event listing
+│   │   │   ├── HeroSection.jsx               # Landing hero section
+│   │   │   └── PageNotFound.jsx              # 404 error page
+│   │   └── lib/                              # Utility functions
+│   │       ├── utils.js                      # Tailwind utilities
+│   │       └── Constants.jsx                 # Event categories
+│   ├── public/                               # Static assets
+│   ├── package.json                          # Node.js dependencies
+│   ├── vite.config.js                        # Vite configuration
+│   ├── tailwind.config.js                    # Tailwind configuration
+│   └── postcss.config.js                     # PostCSS configuration
+├── .gitignore                                # Git ignore rules
+└── README.md                                 # This file
 ```
 
 ## 🚀 Getting Started
