@@ -365,13 +365,6 @@ The project uses Tailwind CSS with custom CSS variables for theming (**themes im
 - **File Upload Security**: File type validation
 - **Environment Variables**: Sensitive data protection
 
-## 📱 Responsive Design
-
-The application is fully responsive with breakpoints:
-- **Mobile**: < 640px
-- **Tablet**: 640px - 1024px
-- **Desktop**: > 1024px
-
 
 ## 📝 License
 
