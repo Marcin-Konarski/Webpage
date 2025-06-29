@@ -1,6 +1,6 @@
 # Venuo - Event Management Website
 
-A modern, full-stack event management website built with React and Flask. Venuo allows users to create, discover, and participate in events with a responsive interface made in React.js and backend in Python Flask.
+A modern, full-stack event management website. Venuo allows users to create, discover, and participate in events with a responsive interface made in React.js and backend in Python Flask.
 
 
 ***This webpage was built as a project for my internship with the foundation "Głos Młodych" [https://fundacjaglosmlodych.org/](https://fundacjaglosmlodych.org/)***
@@ -376,15 +376,6 @@ The application is fully responsive with breakpoints:
 ## 📝 License
 
 This project is licensed under the MIT License
-
-## 🙏 Acknowledgments
-
-- **React Team** - For the amazing React framework
-- **Flask Team** - For the lightweight Python web framework
-- **Tailwind CSS** - For the utility-first CSS framework
-- **Lucide** - For the beautiful icon library
-- **SendGrid** - For reliable email delivery
-- **DigitalOcean** - Cloud platform used for hosting
 
 
 ## 📋 TODO:
