@@ -6,6 +6,7 @@ import "flatpickr/dist/flatpickr.min.css";
 import { customFlatpickrStyles } from '@/Components/FlatpickrStyles';
 import { categories } from '@/lib/Constants';
 import { useAuthContext } from "@/AuthContext";
+import API_BASE from '@/lib/Constants'
 
 
 const EventForm = ({ isUpdating = false }) => {
@@ -30,7 +31,7 @@ const EventForm = ({ isUpdating = false }) => {
     const navigate = useNavigate();
     const datePickerRef = useRef(null);
 
-    const API_BASE = "https://api-venuo.mk0x.com"
+    // const API_BASE = "https://api-venuo.mk0x.com"
     // const API_BASE = "http://localhost:5000"
 
     // this fetches events if updating is true

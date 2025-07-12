@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState} from 'react'
 import axios from 'axios';
+import API_BASE from '@/lib/Constants'
 
 
 const EventContext = createContext(undefined);
@@ -12,7 +13,7 @@ export function useEventContext() {
   return context
 }
 
-const API_BASE = "https://api-venuo.mk0x.com";
+// const API_BASE = "https://api-venuo.mk0x.com";
 
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);

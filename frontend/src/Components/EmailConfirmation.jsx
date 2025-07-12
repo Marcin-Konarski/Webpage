@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Background from '@/Components/Background';
 import NavBar from '@/Components/NavBar';
+import API_BASE from '@/lib/Constants'
+
 
 const EmailConfirmation = () => {
     const { token } = useParams();
@@ -9,10 +11,12 @@ const EmailConfirmation = () => {
     const [status, setStatus] = useState('loading');
     const [message, setMessage] = useState('');
 
+    // const API_BASE = "https://api-venuo.mk0x.com";
+
     useEffect(() => {
         const confirmEmail = async () => {
             try {
-                const response = await fetch(`https://api-venuo.mk0x.com/confirm/${token}`, {
+                const response = await fetch(`${API_BASE}/confirm/${token}`, {
                     method: 'GET',
                     credentials: 'include'
                 });

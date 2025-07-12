@@ -1,15 +1,8 @@
 
 
-
-
-// export const categories = [
-//     "Music", "Art", "Sports", "Recreation", "Food", "Drink", "Business", "Education",
-//     "Family", "Kids", "Community", "Parties", "Outdoor", "Nature", "Adventure", "Politics",
-//     "Government", "Health", "Spirituality", "Shopping", "Fashion", "Travel", "Media", "Cinema",
-//     "Entertainment", "Career", "Science", "Technology", "Home", "Gardening", "Faith", "Religion",
-//     "Charity", "Social", "Festivals", "Other"
-// ];
-
+// const API_BASE = "https://api-venuo.mk0x.com"
+const API_BASE = "http://localhost:5000"
+export default API_BASE
 
 export const categories = [
   "music",

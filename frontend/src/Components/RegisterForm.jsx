@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils'
+import API_BASE from '@/lib/Constants'
+
 
 const RegisterForm = () => {
     const [name, setName] = useState("");
@@ -13,7 +15,7 @@ const RegisterForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    const API_BASE = "https://api-venuo.mk0x.com"
+    // const API_BASE = "https://api-venuo.mk0x.com"
     // const API_BASE = "http://localhost:5000";
 
     const validate = async(e) => {

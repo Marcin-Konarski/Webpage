@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE from '@/lib/Constants'
+
 
 const AuthContext = createContext(undefined);
 
@@ -11,7 +13,7 @@ export function useAuthContext() {
     return context
 }
 
-const API_BASE = "https://api-venuo.mk0x.com"
+// const API_BASE = "https://api-venuo.mk0x.com"
 // const API_BASE = "http://localhost:5000"
 
 export const AuthProvider = ({ children }) => {

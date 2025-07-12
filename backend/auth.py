@@ -189,7 +189,7 @@ def register():
     db.session.commit()
 
     token = generate_token(email)
-    confirm_url = f"https://venuo.mk0x.com/confirm/{token}"
+    confirm_url = f"{API_BASE}/confirm/{token}"
     print(f"Confirmation URL: {confirm_url}")
 
     subject = "Please confirm your email - Venuo Events"

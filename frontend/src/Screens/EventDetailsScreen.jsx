@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { X, MapPin, Calendar, Tag, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/AuthContext'
+import API_BASE from '@/lib/Constants'
+
 
 const EventDetailsScreen = ({ event, onClose, isOwner = false }) => {
     if (!event) return <div>Event not found</div>;
@@ -12,7 +14,7 @@ const EventDetailsScreen = ({ event, onClose, isOwner = false }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const isUserParticipant = user && currentEvent.participants?.some(p => p.id === user.id);
-    const API_BASE = "https://api-venuo.mk0x.com"
+    // const API_BASE = "https://api-venuo.mk0x.com"
 
     const onJoinEvent = async () => {
         if (!isAuthenticated) {
